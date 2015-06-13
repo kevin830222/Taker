@@ -103,7 +103,19 @@
             "data": "ACCEPT"
         }
 
-9. 傳送圖片    `POST /send_picture.php`
+9. 出下一題 `POST /next_problem.php`
+
+        傳入：
+        {
+                "round_id": "round1"
+        }
+        回傳：
+        {
+            "code": 200,
+            "data": "ACCEPT"
+        }
+
+10. 傳送圖片    `POST /send_picture.php`
 
         傳入：
         filename = {prob_id}/{round_id}-{prob_cnt}.png
@@ -113,7 +125,7 @@
             "data": "ACCEPT"
         }
 
-10. 回答問題    `POST /answer_problem.php`
+11. 回答問題    `POST /answer_problem.php`
 
         傳入：
         {
