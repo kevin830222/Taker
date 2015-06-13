@@ -65,7 +65,8 @@
 
         傳入：
         {
-            "players": ["player1", "player2"]
+            "player1": "player1",
+            "player2": "player2"
         }
         回傳：
         {
@@ -79,7 +80,8 @@
         {
             "code": 200,
             "data": {
-                "players":  ["player1", "player2"],
+                "player1":  "player1",
+                "player2":  "player2",
                 "score":    10,
                 "act":      0,
                 "problem":  "Problem1",
@@ -116,7 +118,7 @@
         傳入：
         {
             "round_id": "round1",
-            "answer":   "Answer1"
+            "answer":   "answer1"
         }
         回傳：
         {
@@ -138,6 +140,6 @@
     + password
     + updated
 + problem
-    + problem_id
+    + prob_id
     + name
     + class
