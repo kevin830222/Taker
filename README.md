@@ -118,7 +118,7 @@
 10. 傳送圖片    `POST /send_picture.php`
 
         傳入：
-        filename = {prob_id}/{round_id}-{prob_cnt}.png
+        filename = {round_id}-{prob_cnt}-x.png
         回傳：
         {
             "code": 200,
