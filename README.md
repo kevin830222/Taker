@@ -1,6 +1,6 @@
 # Taker
-
-## API Spec.
+---
+## API Spec
 1. 註冊 `POST /signup.php`  
 
         傳入：
@@ -123,3 +123,21 @@
             "code": 200,
             "data": "ACCEPT"
         }
+
+## MySQL Tables
++ round
+    + round_id
+    + players
+    + score
+    + act
+    + prob_index
+    + prob_seq
+    + answer
++ player
+    + player_id
+    + password
+    + updated
++ problem
+    + problem_id
+    + name
+    + class
