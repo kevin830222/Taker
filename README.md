@@ -104,7 +104,7 @@
 9. 傳送圖片    `POST /send_picture.php`
 
         傳入：
-        filename = {round_id}-{player_id}.png
+        filename = {prob_id}/{round_id}-{prob_cnt}.png
         回傳：
         {
             "code": 200,
@@ -130,8 +130,8 @@
     + players
     + score
     + act
-    + prob_index
-    + prob_seq
+    + prob_cnt
+    + prob_id
     + answer
 + player
     + player_id
