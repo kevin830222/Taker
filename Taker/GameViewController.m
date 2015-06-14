@@ -11,6 +11,7 @@
 #import "UIViewController+LewPopupViewController.h"
 #import "LewPopupViewAnimationFade.h"
 #import "PopupView.h"
+#import "InviteView.h"
 
 @interface GameViewController ()
 
@@ -124,7 +125,8 @@
             NSString* data = [json objectForKey:@"data"];
             if (code == 200) {
                 [[MoTaker sharedInstance]setRound_id:data];
-                PopupView *view = [PopupView defaultPopupView];
+                
+                InviteView *view = [InviteView defaultPopupView];
                 view.parentVC = self;
                 [self lew_presentPopupView:view animation:[LewPopupViewAnimationFade new] dismissed:^{
                     [self.respondTimer invalidate];

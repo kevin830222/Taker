@@ -28,10 +28,7 @@ NSArray *invite;
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        
-        _inviteTableView.dataSource = self;
-        _inviteTableView.delegate = self;
-        
+            
         invite = [[[MoTaker sharedInstance]player]objectForKey:@"invite"];
         
     }
