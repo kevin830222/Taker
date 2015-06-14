@@ -11,6 +11,9 @@
 		0A005F6F1B2D9EBA00794058 /* MeetiFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0A005F6C1B2D9EB300794058 /* MeetiFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3F6227881B2DDB05000947CD /* InviteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F6227861B2DDB05000947CD /* InviteView.m */; };
 		3F6227891B2DDB05000947CD /* InviteView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F6227871B2DDB05000947CD /* InviteView.xib */; };
+		3F62278C1B2DEB7D000947CD /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F62278B1B2DEB7D000947CD /* CameraViewController.m */; };
+		3F6227931B2DF538000947CD /* CustomAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F62278E1B2DF538000947CD /* CustomAlertView.m */; };
+		3F6227941B2DF538000947CD /* UIButton+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F6227901B2DF538000947CD /* UIButton+Badge.m */; };
 		3F921CB21B2DA14000E1A2E6 /* MoTaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F921CB11B2DA14000E1A2E6 /* MoTaker.m */; };
 		3F921CB51B2DA51700E1A2E6 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F921CB41B2DA51700E1A2E6 /* LoginViewController.m */; };
 		3FC6A0B01B2D7E94002AC531 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FC6A0AF1B2D7E94002AC531 /* main.m */; };
@@ -59,6 +62,12 @@
 		3F6227851B2DDB05000947CD /* InviteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteView.h; sourceTree = "<group>"; };
 		3F6227861B2DDB05000947CD /* InviteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteView.m; sourceTree = "<group>"; };
 		3F6227871B2DDB05000947CD /* InviteView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InviteView.xib; sourceTree = "<group>"; };
+		3F62278A1B2DEB7D000947CD /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
+		3F62278B1B2DEB7D000947CD /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
+		3F62278D1B2DF538000947CD /* CustomAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomAlertView.h; sourceTree = "<group>"; };
+		3F62278E1B2DF538000947CD /* CustomAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomAlertView.m; sourceTree = "<group>"; };
+		3F62278F1B2DF538000947CD /* UIButton+Badge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Badge.h"; sourceTree = "<group>"; };
+		3F6227901B2DF538000947CD /* UIButton+Badge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Badge.m"; sourceTree = "<group>"; };
 		3F921CB01B2DA14000E1A2E6 /* MoTaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoTaker.h; sourceTree = "<group>"; };
 		3F921CB11B2DA14000E1A2E6 /* MoTaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoTaker.m; sourceTree = "<group>"; };
 		3F921CB31B2DA51700E1A2E6 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
@@ -158,6 +167,12 @@
 				3F6227851B2DDB05000947CD /* InviteView.h */,
 				3F6227861B2DDB05000947CD /* InviteView.m */,
 				3F6227871B2DDB05000947CD /* InviteView.xib */,
+				3F62278A1B2DEB7D000947CD /* CameraViewController.h */,
+				3F62278B1B2DEB7D000947CD /* CameraViewController.m */,
+				3F62278D1B2DF538000947CD /* CustomAlertView.h */,
+				3F62278E1B2DF538000947CD /* CustomAlertView.m */,
+				3F62278F1B2DF538000947CD /* UIButton+Badge.h */,
+				3F6227901B2DF538000947CD /* UIButton+Badge.m */,
 				3FC6A0DE1B2D988B002AC531 /* ProfileViewController.h */,
 				3FC6A0DF1B2D988B002AC531 /* ProfileViewController.m */,
 				3F6227841B2DCC38000947CD /* SDProgressView */,
@@ -316,8 +331,11 @@
 				3FFE27121B2DC53B00D5203A /* SDRotationLoopProgressView.m in Sources */,
 				3FFE27261B2DC9AD00D5203A /* LewPopupViewAnimationFade.m in Sources */,
 				3FC6A0B31B2D7E94002AC531 /* AppDelegate.m in Sources */,
+				3F6227941B2DF538000947CD /* UIButton+Badge.m in Sources */,
+				3F6227931B2DF538000947CD /* CustomAlertView.m in Sources */,
 				3F6227881B2DDB05000947CD /* InviteView.m in Sources */,
 				3FFE27271B2DC9AD00D5203A /* UIViewController+LewPopupViewController.m in Sources */,
+				3F62278C1B2DEB7D000947CD /* CameraViewController.m in Sources */,
 				3FC6A0DD1B2D987A002AC531 /* GameViewController.m in Sources */,
 				3F921CB51B2DA51700E1A2E6 /* LoginViewController.m in Sources */,
 				3FC6A0E01B2D988B002AC531 /* ProfileViewController.m in Sources */,

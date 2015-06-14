@@ -50,6 +50,7 @@ NSArray *invite;
 
 #pragma mark - table view
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
     //  reuse cell
     
     static NSString *CellIdentifier = @"inviteCell";
@@ -61,14 +62,23 @@ NSArray *invite;
     }
     
     cell.textLabel.text = [invite objectAtIndex:indexPath.row];
-    cell.textLabel.text = @"TEST";
     
     return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSLog(@"count = %lu", (unsigned long)invite.count);
     return invite.count;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+
+    [[MoTaker sharedInstance]deny_invitation];
+    
+    NSString *round_id = [invite objectAtIndex:indexPath.row];
+    [[MoTaker sharedInstance]setRound_id:round_id];
+    UIViewController *cameraVC = [self.parentVC.storyboard instantiateViewControllerWithIdentifier:@"cameraVC"];
+    [self.parentVC presentViewController:cameraVC animated:YES completion:nil];
 }
 
 @end
