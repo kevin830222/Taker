@@ -117,8 +117,8 @@
         [overlayView addSubview:backgroundView];
         
         // Make the Background Clickable
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(lew_dismissPopupView)];
-        [overlayView addGestureRecognizer:tap];
+//        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(lew_dismissPopupView)];
+//        [overlayView addGestureRecognizer:tap];
         self.lewOverlayView = overlayView;
     }
     
