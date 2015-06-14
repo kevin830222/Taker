@@ -16,6 +16,8 @@
 
 @end
 
+NSInteger respondTimes;
+
 @implementation GameViewController
 
 - (void)viewDidLoad {
@@ -101,6 +103,9 @@
     }
     
     cell.textLabel.text = [self.onlinePlayers objectAtIndex:indexPath.row];
+    if ([[self.onlinePlayers objectAtIndex:indexPath.row] isEqualToString:[[MoTaker sharedInstance]account]]) {
+        cell.backgroundColor = [UIColor colorWithRed:1.000 green:0.805 blue:0.644 alpha:1.000];
+    }
     
     return cell;
 
@@ -131,6 +136,7 @@
                     [self.respondTimer invalidate];
                 }];
                 
+                respondTimes = 0;
                 self.respondTimer = [NSTimer scheduledTimerWithTimeInterval:RESPOND_INTERVAL
                                                                      target:self
                                                                    selector:@selector(get_respond)
@@ -150,6 +156,7 @@
 }
 
 - (void)get_respond {
+    respondTimes ++;
     [[[MoTaker sharedInstance]manager]GET:[API_PREFIX stringByAppendingString:@"get_round.php"]
                                parameters:@{@"round_id":[[MoTaker sharedInstance]round_id]}
                                   success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -169,17 +176,40 @@
                     UIViewController *cameraVC = [self.storyboard instantiateViewControllerWithIdentifier:@"cameraVC"];
                     [self presentViewController:cameraVC animated:YES completion:nil];
                 }
-                NSLog(@"data = %@[%@]", data, data.class);
+                //  timeout
+                else if (respondTimes * RESPOND_INTERVAL > RESPOND_TIMEOUT) {
+                    [[[MoTaker sharedInstance]manager]POST:[API_PREFIX stringByAppendingString:@"quit_round.php"]
+                                                parameters:@{@"round_id":[[MoTaker sharedInstance]round_id]}
+                                                   success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                      NSError* error = nil;
+                                                      NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
+                                                      if (error) {
+                                                          [[MoTaker sharedInstance]alert:@"Server Error" message:[error description]];
+                                                      }
+                                                      else {
+                                                          NSInteger code = [[json objectForKey:@"code"]integerValue];
+                                                          NSString* data = [json objectForKey:@"data"];
+                                                          if (code == 200) {
+                                                              [self lew_dismissPopupView];
+                                                          }
+                                                          else {
+                                                              [[MoTaker sharedInstance]alert:@"Quit Round Failed" message:data];
+                                                          }
+                                                      }
+                                                      
+                                                  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                      [[MoTaker sharedInstance]alert:@"Internet Error" message:[error description]];
+                                                  }];
+                }
             }
             else {
-                [[MoTaker sharedInstance]alert:@"Get Online List Failed" message:data];
+                [[MoTaker sharedInstance]alert:@"Get Round Data Failed" message:data];
             }
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [[MoTaker sharedInstance]alert:@"Internet Error" message:[error description]];
     }];
-
 }
 
 @end
