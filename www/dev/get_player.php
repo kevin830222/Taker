@@ -10,7 +10,7 @@
 	$result=mysqli_query($conn,$q);
 	if($row=mysqli_fetch_array($result)){
 		$data = array('score'=>$row['score'], 'updated'=>$row['updated']);
-		$q="SELECT * FROM round WHERE round.player2='".$_GET['player_id']."'";
+		$q="SELECT * FROM round WHERE round.done=0 and round.player2='".$_GET['player_id']."'";
 		//echo $q."<br>";
 		$result=mysqli_query($conn, $q);
 		
