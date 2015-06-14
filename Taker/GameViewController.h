@@ -11,5 +11,7 @@
 @interface GameViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property IBOutlet UITableView *onlineTableView;
+@property NSMutableArray *onlinePlayers;
+@property NSTimer *timer, *respondTimer;
 
 @end

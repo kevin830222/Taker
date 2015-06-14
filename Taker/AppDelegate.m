@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "MoTaker.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [self startTimer];
     return YES;
 }
 
@@ -28,10 +30,12 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    [self.timer invalidate];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    [self startTimer];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -41,5 +45,42 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+- (void)startTimer {
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:HEATBEAT_INTERVAL
+                                                  target:self
+                                                selector:@selector(heartbeat)
+                                                userInfo:nil
+                                                 repeats:YES];
+}
+
+- (void)heartbeat {
+    if ([[MoTaker sharedInstance]account] == nil || [[MoTaker sharedInstance]password] == nil)   return;
+    [[[MoTaker sharedInstance]manager]POST:[API_PREFIX stringByAppendingString:@"heartbeat.php"]
+                                parameters:@{@"player_id":[[MoTaker sharedInstance]account]}
+                                   success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSError* error = nil;
+        NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
+        if (error) {
+            [[MoTaker sharedInstance]alert:@"Server Error" message:[error description]];
+        }
+        else {
+            NSInteger code = [[json objectForKey:@"code"]integerValue];
+            NSString* data = [json objectForKey:@"data"];
+            if (code == 200) {
+                NSLog(@"Heartbeat");
+            }
+            else {
+                [[MoTaker sharedInstance]alert:@"Heartbeat Failed" message:data];
+            }
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [[MoTaker sharedInstance]alert:@"Internet Error" message:[error description]];
+    }];
+
+}
+
 
 @end
