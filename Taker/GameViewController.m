@@ -11,7 +11,6 @@
 #import "UIViewController+LewPopupViewController.h"
 #import "LewPopupViewAnimationFade.h"
 #import "PopupView.h"
-#import "InviteView.h"
 
 @interface GameViewController ()
 
@@ -126,7 +125,7 @@
             if (code == 200) {
                 [[MoTaker sharedInstance]setRound_id:data];
                 
-                InviteView *view = [InviteView defaultPopupView];
+                PopupView *view = [PopupView defaultPopupView];
                 view.parentVC = self;
                 [self lew_presentPopupView:view animation:[LewPopupViewAnimationFade new] dismissed:^{
                     [self.respondTimer invalidate];
@@ -167,7 +166,8 @@
                 [[MoTaker sharedInstance]setRound:round];
                 if ([[round objectForKey:@"act"]integerValue] == 1) {
                     [self.respondTimer invalidate];
-                    NSLog(@"play!!!!");
+                    UIViewController *cameraVC = [self.storyboard instantiateViewControllerWithIdentifier:@"cameraVC"];
+                    [self presentViewController:cameraVC animated:YES completion:nil];
                 }
                 NSLog(@"data = %@[%@]", data, data.class);
             }

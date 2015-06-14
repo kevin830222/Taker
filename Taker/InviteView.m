@@ -77,8 +77,34 @@ NSArray *invite;
     
     NSString *round_id = [invite objectAtIndex:indexPath.row];
     [[MoTaker sharedInstance]setRound_id:round_id];
-    UIViewController *cameraVC = [self.parentVC.storyboard instantiateViewControllerWithIdentifier:@"cameraVC"];
-    [self.parentVC presentViewController:cameraVC animated:YES completion:nil];
+
+    //  accept round
+    [[[MoTaker sharedInstance]manager]POST:[API_PREFIX stringByAppendingString:@"accept_round.php"]
+                               parameters:@{@"round_id":round_id}
+                                  success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                      NSError* error = nil;
+                                      NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
+                                      NSLog(@"data = %@", [[NSString alloc] initWithData:responseObject encoding:kCFStringEncodingUTF8]);
+                                      NSLog(@"json = %@", json);
+                                      if (error) {
+                                          [[MoTaker sharedInstance]alert:@"Server Error" message:[error description]];
+                                      }
+                                      else {
+                                          NSInteger code = [[json objectForKey:@"code"]integerValue];
+                                          NSString* data = [json objectForKey:@"data"];
+                                          if (code == 200) {
+                                              UIViewController *guessVC = [self.parentVC.storyboard instantiateViewControllerWithIdentifier:@"guessVC"];
+                                              [self.parentVC presentViewController:guessVC animated:YES completion:nil];
+                                          }
+                                          else {
+                                              [[MoTaker sharedInstance]alert:@"Accept Round Failed" message:data];
+                                          }
+                                      }
+                                      
+                                  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                      [[MoTaker sharedInstance]alert:@"Internet Error" message:[error description]];
+                                  }];
+    
 }
 
 @end
