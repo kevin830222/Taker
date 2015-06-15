@@ -136,6 +136,15 @@ AVCaptureStillImageOutput *imageOutput;
             UIImage *image = [[UIImage alloc] initWithData:imageData];
             self.imageView.image = image;
             
+            [[[MoTaker sharedInstance] manager] POST:@"url" parameters:@"" constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+                [formData appendPartWithFileData:imageData name:@"image" fileName:@"image.jpg" mimeType:@"image/jpeg"];
+            } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                
+            }];
+            
+            
             //取得影像資料（需要ImageIO.framework 與 CoreMedia.framework）
 //            CFDictionaryRef myAttachments = CMGetAttachment(imageDataSampleBuffer, kCGImagePropertyExifDictionary, NULL);
 //            NSLog(@"影像屬性: %@", myAttachments);
