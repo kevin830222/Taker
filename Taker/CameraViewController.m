@@ -137,7 +137,7 @@ AVCaptureStillImageOutput *imageOutput;
             self.imageView.image = image;
             
             [[[MoTaker sharedInstance] manager] POST:@"url" parameters:@"" constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-                [formData appendPartWithFileData:imageData name:@"image" fileName:@"image.jpg" mimeType:@"image/jpeg"];
+                [formData appendPartWithFileData:imageData name:@"file" fileName:@"image.jpg" mimeType:@"image/jpeg"];
             } success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
