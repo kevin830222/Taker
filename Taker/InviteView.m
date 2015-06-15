@@ -13,6 +13,7 @@
 
 
 NSArray *invite;
+NSTimer *timer;
 
 @implementation InviteView
 
@@ -24,12 +25,18 @@ NSArray *invite;
 }
 */
 
+
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
             
-        invite = [[[MoTaker sharedInstance]player]objectForKey:@"invite"];
+        timer = [NSTimer scheduledTimerWithTimeInterval:REINVITE_INTERVAL
+                                                 target:self
+                                               selector:@selector(reinvite)
+                                               userInfo:nil
+                                                repeats:YES];
+        
         
     }
     return self;
@@ -40,12 +47,38 @@ NSArray *invite;
     return [views lastObject];
 }
 
-- (IBAction)dismissAction:(id)sender{
-    [_parentVC lew_dismissPopupView];
-}
+- (void)reinvite {
 
-- (IBAction)dismissViewFadeAction:(id)sender{
-    [_parentVC lew_dismissPopupViewWithanimation:[LewPopupViewAnimationFade new]];
+    MoTaker *motaker = [MoTaker sharedInstance];
+    [motaker.manager GET:[API_PREFIX stringByAppendingString:@"get_player.php"]
+           parameters:@{@"player_id":motaker.account}
+              success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                  NSError* error = nil;
+                  NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
+                  if (error) {
+                      [motaker alert:@"Server Error" message:[error description]];
+                  }
+                  else {
+                      NSInteger code = [[json objectForKey:@"code"]integerValue];
+                      NSString* data = [json objectForKey:@"data"];
+                      if (code == 200) {
+                          NSDictionary *player = (NSDictionary*)data;
+                          [[MoTaker sharedInstance]setPlayer:player];
+                      }
+                      else {
+                          [motaker alert:@"Get Player Info Failed" message:data];
+                      }
+                  }
+                  
+              } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                  [motaker alert:@"Internet Error" message:[error description]];
+              }];
+    
+    invite = [[[MoTaker sharedInstance]player]objectForKey:@"invite"];
+    if (invite.count == 0) {
+        [self.parentVC lew_dismissPopupView];
+    }
+    [self.inviteTableView reloadData];
 }
 
 #pragma mark - table view
@@ -93,6 +126,7 @@ NSArray *invite;
                                           NSInteger code = [[json objectForKey:@"code"]integerValue];
                                           NSString* data = [json objectForKey:@"data"];
                                           if (code == 200) {
+                                              [timer invalidate];
                                               UIViewController *guessVC = [self.parentVC.storyboard instantiateViewControllerWithIdentifier:@"guessVC"];
                                               [self.parentVC presentViewController:guessVC animated:YES completion:nil];
                                           }

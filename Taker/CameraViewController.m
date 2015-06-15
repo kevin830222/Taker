@@ -140,7 +140,9 @@ AVCaptureStillImageOutput *imageOutput;
 //            CFDictionaryRef myAttachments = CMGetAttachment(imageDataSampleBuffer, kCGImagePropertyExifDictionary, NULL);
 //            NSLog(@"影像屬性: %@", myAttachments);
             
-            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+            
+            
+//            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
             
         }
     }];

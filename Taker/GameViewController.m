@@ -49,6 +49,10 @@ NSInteger respondTimes;
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.timer invalidate];
+
+    //  deny invitation
+    [[MoTaker sharedInstance]deny_invitation];
+
 }
 
 - (void)didReceiveMemoryWarning {

@@ -13,7 +13,10 @@
 #define HEATBEAT_INTERVAL   3
 #define ONLINE_INTERVAL     5
 #define RESPOND_INTERVAL    0.5
+#define RESPOND_TIMEOUT     10
 #define INVITE_INTERVAL     0.5
+#define REINVITE_INTERVAL   0.5
+
 
 @interface MoTaker : NSObject
 
@@ -25,6 +28,7 @@
 @property NSDictionary* player;
 @property NSString* account;
 @property NSString* password;
+@property BOOL inviteNotify;
 @property AFHTTPRequestOperationManager* manager;
 
 - (void)alert:(NSString*)title
