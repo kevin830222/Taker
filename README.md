@@ -85,6 +85,7 @@
                 "score":    10,
                 "act":      0,
                 "problem":  "Problem1",
+                "prob_cnt": 1,
                 "answer":   "Answer1",
                 "options":  ["Problem1", "Problem2", "Problem3"],
                 "pictures": ["PictureURL1", "PictureURL2", "PictureURL3"]
