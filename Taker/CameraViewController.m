@@ -311,6 +311,31 @@ typedef enum : NSUInteger {
     }
 }
 
+- (IBAction)exit:(id)sender {
+    [[[MoTaker sharedInstance]manager]POST:[API_PREFIX stringByAppendingString:@"quit_round.php"]
+                                parameters:@{@"round_id":[[MoTaker sharedInstance] round_id]}
+                                   success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                       NSError* error = nil;
+                                       NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
+                                       if (error) {
+                                           [[MoTaker sharedInstance]alert:@"Server Error" message:[error description]];
+                                       }
+                                       else {
+                                           NSInteger code = [[json objectForKey:@"code"]integerValue];
+                                           NSString* data = [json objectForKey:@"data"];
+                                           if (code == 200) {
+                                               [self dismissViewControllerAnimated:YES completion:nil];
+                                           }
+                                           else {
+                                               [[MoTaker sharedInstance]alert:@"Quit Round Failed" message:data];
+                                           }
+                                       }
+                                       
+                                   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                       [[MoTaker sharedInstance]alert:@"Internet Error" message:[error description]];
+                                   }];
+}
+
 - (void)get_problem {
 }
 
