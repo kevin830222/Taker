@@ -203,7 +203,6 @@ typedef enum : NSUInteger {
                 if ([[round objectForKey:@"done"]integerValue] == 1) {
                     [self dismissViewControllerAnimated:YES completion:nil];
                 }
-                NSLog(@"round = %@", data);
             }
             else {
                 [[MoTaker sharedInstance]alert:@"Get Round Data Failed" message:data];
@@ -312,6 +311,7 @@ typedef enum : NSUInteger {
 
 - (void)didAnswerProblem {
     NSDictionary* round = [[MoTaker sharedInstance]round];
+    NSLog(@"Prob Cnt. = %ld", (long)[[round objectForKey:@"prob_cnt"]integerValue]);
     if ([[round objectForKey:@"prob_cnt"]integerValue] > current_prob_cnt) {
         current_prob_cnt = [[round objectForKey:@"prob_cnt"]integerValue];
         [self lew_dismissPopupView];
