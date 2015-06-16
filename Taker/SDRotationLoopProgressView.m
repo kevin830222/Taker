@@ -9,7 +9,8 @@
 #import "SDRotationLoopProgressView.h"
 
 // 加载时显示的文字
-NSString * const SDRotationLoopProgressViewWaitingText = @"LOADING...";
+NSString * const SDRotationLoopProgressViewLoadingText = @"LOADING...";
+NSString * const SDRotationLoopProgressViewWaitingText = @"WAITING...";
 
 @implementation SDRotationLoopProgressView
 {
@@ -51,7 +52,7 @@ NSString * const SDRotationLoopProgressViewWaitingText = @"LOADING...";
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     attributes[NSFontAttributeName] = [UIFont boldSystemFontOfSize:13 * SDProgressViewFontScale];
     attributes[NSForegroundColorAttributeName] = [UIColor lightGrayColor];
-    [self setCenterProgressText:SDRotationLoopProgressViewWaitingText withAttributes:attributes];
+    [self setCenterProgressText:SDRotationLoopProgressViewLoadingText withAttributes:attributes];
 }
 
 @end
