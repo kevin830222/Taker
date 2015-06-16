@@ -18,7 +18,14 @@
 			// update round information
 			if ($problem == $_POST['answer']) {
 				$q="update round set score=score+1 where round_id = '" . $_POST['round_id'] . "'";
-				$j = array('code'=>200, 'data'=>'ACCEPT');
+				$result=mysqli_query($conn, $q);
+				if(mysqli_fetch_array($result)) {
+					$j = array('code'=>200, 'data'=>'ACCEPT');
+				}
+				else {
+					$j=array('code'=>-1,'data'=>'MYSQL ERROR');
+				}
+				
 			}
 			else 
 				$j = array('code'=>200, 'data'=>'WRONG');
