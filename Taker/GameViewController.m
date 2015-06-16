@@ -189,6 +189,7 @@ NSInteger respondTimes;
                 [[MoTaker sharedInstance]setRound:round];
                 if ([[round objectForKey:@"act"]integerValue] == 1) {
                     [self.respondTimer invalidate];
+                    [self lew_dismissPopupView];
                     UIViewController *cameraVC = [self.storyboard instantiateViewControllerWithIdentifier:@"cameraVC"];
                     [self presentViewController:cameraVC animated:YES completion:nil];
                 }

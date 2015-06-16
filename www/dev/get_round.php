@@ -36,7 +36,8 @@
 			'player2'=>$row['player2'], 
 			'score'=>$row['score'], 
 			'act'=>$row['act'], 
-			'answer'=>$row['answer']);
+			'answer'=>$row['answer'],
+			'done'=>$row['done']);
 
 		$prob_id = $row['prob_id'];
 		$prob_cnt = $row['prob_cnt'];

@@ -36,6 +36,19 @@ typedef enum : NSUInteger {
     self = [super initWithCoder:coder];
     if (self) {
         self.guessMode = NO;
+        //  出題
+        [[[MoTaker sharedInstance] manager]
+         POST:[API_PREFIX stringByAppendingPathComponent:@"next_problem.php"]
+         parameters:@{@"round_id": [[MoTaker sharedInstance] round_id]}
+         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+
+             [self get_round];
+             hintLabel.text = [[[MoTaker sharedInstance]round]objectForKey:@"problem"];
+
+         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+             NSLog(@"fail");
+         }];
+        
     }
     return self;
 }
@@ -109,16 +122,7 @@ typedef enum : NSUInteger {
     
     [hintView setBackgroundColor:[[hintView backgroundColor] colorWithAlphaComponent:0.5f]];
     hintView.alpha = 0.0;
-    
-    //  出題
-    [[[MoTaker sharedInstance] manager]
-     POST:[API_PREFIX stringByAppendingPathComponent:@"next_problem.php"]
-                                  parameters:@{@"round_id": [[MoTaker sharedInstance] round_id]}
-     success:^(AFHTTPRequestOperation *operation, id responseObject) {
-         NSLog(@"response = %@",operation.responseString);
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"fail");
-     }];
+
 }
 
 
@@ -194,7 +198,11 @@ typedef enum : NSUInteger {
             NSInteger code = [[json objectForKey:@"code"]integerValue];
             NSString* data = [json objectForKey:@"data"];
             if (code == 200) {
-                [[MoTaker sharedInstance]setRound:(NSDictionary*)data];
+                NSDictionary *round = (NSDictionary*)data;
+                [[MoTaker sharedInstance]setRound:round];
+                if ([[round objectForKey:@"done"]integerValue] == 1) {
+                    [self dismissViewControllerAnimated:YES completion:nil];
+                }
                 NSLog(@"round = %@", data);
             }
             else {
