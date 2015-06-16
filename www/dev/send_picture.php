@@ -1,16 +1,33 @@
 <?php
+
+	// echo debug variable
+	function echo_debug($var, $file="/tmp/error.log") {
+	    $date = date("H:i:s", time());
+	    ob_start();
+	    var_dump($var);
+	    $result = ob_get_clean();
+
+	    if (file_exists($file)) {
+	        // Open the file to get existing content
+	        $current = file_get_contents($file);
+
+	        // Append a new person to the file
+	        $current .= "[$date] $result\n";
+	    }else{
+	        $current = $result;
+	    }
+	    if (is_writable($file)) {
+	        // Write the contents back to the file
+	        file_put_contents($file, $current);
+	    }
+	}
+
 	$conn=mysqli_connect("localhost","root","cnlroot","cnldb");
 	if(mysqli_connect_errno()){
 		echo "Failed to connect to MySQL: ",mysqli_connect_error();
 		exit(0);
 	}
 
-	/* echo "error: " . $_FILES["file"]["error"]."<br/>";
-	echo "name: " . $_FILES["file"]["name"]."<br/>";
-	echo "type: " . $_FILES["file"]["type"]."<br/>";
-	echo "size: " . ($_FILES["file"]["size"] / 1024)." Kb<br />";
-	echo "tmp_name: " . $_FILES["file"]["tmp_name"]."<br/>"; */
-	
 	$q="select prob_id from round where round_id = '" . strtok(basename($_FILES["file"]["name"]),"-") . "'";
 	//echo $q . "<br>";
 	$result=mysqli_query($conn,$q);

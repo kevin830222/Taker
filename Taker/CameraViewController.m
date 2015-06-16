@@ -18,6 +18,12 @@ AVCaptureDevice *frontDevice = nil, *backDevice = nil;
 AVCaptureDeviceInput *frontInput = nil, *backInput = nil, *currentInput = nil;
 NSMutableArray *pictures;
 AVCaptureStillImageOutput *imageOutput;
+NSInteger current_prob_cnt = 0;
+
+typedef enum : NSUInteger {
+    ProblemMode,
+    GuessMode,
+} TakerMode;
 
 @interface CameraViewController () <UITabBarDelegate>
 
@@ -88,14 +94,14 @@ AVCaptureStillImageOutput *imageOutput;
     }
     
     
-    //建立 AVCaptureVideoPreviewLayer
+    //  建立 AVCaptureVideoPreviewLayer
     AVCaptureVideoPreviewLayer *previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:session];
     [previewLayer setVideoGravity:AVLayerVideoGravityResize];
     [previewLayer setFrame:self.cameraView.frame];
     [self.cameraView.layer addSublayer:previewLayer];
     [[self.cameraView layer] setMasksToBounds:YES];
     
-    //建立 AVCaptureStillImageOutput
+    //  建立 AVCaptureStillImageOutput
     imageOutput = [[AVCaptureStillImageOutput alloc] init];
     NSDictionary *outputSettings = [[NSDictionary alloc] initWithObjectsAndKeys:AVVideoCodecJPEG,AVVideoCodecKey,nil];
     [imageOutput setOutputSettings:outputSettings];
@@ -104,7 +110,7 @@ AVCaptureStillImageOutput *imageOutput;
     [hintView setBackgroundColor:[[hintView backgroundColor] colorWithAlphaComponent:0.5f]];
     hintView.alpha = 0.0;
     
-    
+    //  出題
     [[[MoTaker sharedInstance] manager]
      POST:[API_PREFIX stringByAppendingPathComponent:@"next_problem.php"]
                                   parameters:@{@"round_id": [[MoTaker sharedInstance] round_id]}
@@ -138,37 +144,67 @@ AVCaptureStillImageOutput *imageOutput;
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     
+    get_round_timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(get_round) userInfo:nil repeats:YES];
+
     if (self.guessMode){
-        //guess mode
-        problemModeView.hidden = YES;
-        guessModeView.hidden = NO;
-        self.cameraView.hidden = YES;
-        PopupView *view = [PopupView defaultPopupView];
-        view.parentVC = self;
-        [self lew_presentPopupView:view animation:[LewPopupViewAnimationFade new] dismissed:^{
-        }];
-        
-        get_round_timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(get_round) userInfo:nil repeats:YES];
-        
+        [self switchMode:GuessMode];
     }else{
-        //problem mode
-        problemModeView.hidden = NO;
-        guessModeView.hidden = YES;
-        
-        [UIView animateWithDuration:0.3f animations:^{
-            hintView.alpha = 1.0;
-            self.cameraView.alpha = 0.0;
-            [[hintView layer] setCornerRadius:10];
-        }];
+        [self switchMode:ProblemMode];
     }
 }
+
+- (void)switchMode:(TakerMode)mode {
+    switch (mode) {
+        case ProblemMode: {
+            self.guessMode = NO;
+            problemModeView.hidden = NO;
+            guessModeView.hidden = YES;
+            
+            [UIView animateWithDuration:0.3f animations:^{
+                hintView.alpha = 1.0;
+                self.cameraView.alpha = 0.0;
+                [[hintView layer] setCornerRadius:10];
+            }];
+            break;
+        }
+        case GuessMode: {
+            self.guessMode = YES;
+            problemModeView.hidden = YES;
+            guessModeView.hidden = NO;
+            self.cameraView.hidden = YES;
+            PopupView *view = [PopupView defaultPopupView];
+            view.parentVC = self;
+            [self lew_presentPopupView:view animation:[LewPopupViewAnimationFade new] dismissed:^{
+            }];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+
 -(void)get_round{
     [[[MoTaker sharedInstance] manager] GET:[API_PREFIX stringByAppendingPathComponent:@"get_round.php"] parameters:@{@"round_id":[[MoTaker sharedInstance] round_id]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"response = %@",operation.responseString);
+        NSError* error = nil;
+        NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
+        if (error) {
+            [[MoTaker sharedInstance]alert:@"Server Error" message:[error description]];
+        }
+        else {
+            NSInteger code = [[json objectForKey:@"code"]integerValue];
+            NSString* data = [json objectForKey:@"data"];
+            if (code == 200) {
+                [[MoTaker sharedInstance]setRound:(NSDictionary*)data];
+                NSLog(@"round = %@", data);
+            }
+            else {
+                [[MoTaker sharedInstance]alert:@"Get Round Data Failed" message:data];
+            }
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"failure response = %@",error);
-    }];
-}
+        [[MoTaker sharedInstance]alert:@"Internet Error" message:[error description]];
+    }];}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -213,40 +249,67 @@ AVCaptureStillImageOutput *imageOutput;
         if (imageDataSampleBuffer) {
             NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
             
+            NSDictionary *round = [[MoTaker sharedInstance]round];
             
-            NSString* filename = [NSString stringWithFormat:@"%@-%@-%d.jpg",[[MoTaker sharedInstance] round_id], @"",counter];
+            NSString* filename = [NSString stringWithFormat:@"%@-%@-%d.jpg",[[MoTaker sharedInstance] round_id], [round objectForKey:@"prob_cnt"],counter];
         
             [[[MoTaker sharedInstance] manager] POST:[API_PREFIX stringByAppendingString:@"send_picture.php"]
                                           parameters:@"" constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
                 [formData appendPartWithFileData:imageData name:@"file" fileName:filename mimeType:@"image/jpeg"];
             } success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 
-                //取得的靜態影像
-                UIImage *image = [[UIImage alloc] initWithData:imageData];
-                for (UIImageView* v in imageViews) {
-                    if (counter == v.tag) {
-                        [v setImage:image];
-                        break;
+                
+                NSError* error = nil;
+                NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
+                if (error) {
+                    [[MoTaker sharedInstance]alert:@"Server Error" message:[error description]];
+                }
+                else {
+                    NSInteger code = [[json objectForKey:@"code"]integerValue];
+                    NSString* data = [json objectForKey:@"data"];
+                    if (code == 200) {
+                        //取得的靜態影像
+                      
+                        UIImage *image = [[UIImage alloc] initWithData:imageData];
+                        for (UIImageView* v in imageViews) {
+                            if (counter == v.tag) {
+                                [v setImage:image];
+                                break;
+                            }
+                        }
+                        counter++;
+                        
+                        //  拍滿四張
+                        if (counter == 4) {
+                            PopupView *view = [PopupView defaultPopupView];
+                            [self lew_presentPopupView:view animation:[LewPopupViewAnimationFade new]];
+                            answer_timer = [NSTimer scheduledTimerWithTimeInterval:WAIT_ANSWER_INTERVAL
+                                                                            target:self
+                                                                          selector:@selector(didAnswerProblem)
+                                                                          userInfo:nil
+                                                                           repeats:YES];
+                        }
+                    }
+                    else {
+                        [[MoTaker sharedInstance]alert:@"Send Picture Failed" message:data];
                     }
                 }
-                counter++;
-                NSLog(@"success");
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                 NSLog(@"fail");
             }];
             
-            
-            //取得影像資料（需要ImageIO.framework 與 CoreMedia.framework）
-//            CFDictionaryRef myAttachments = CMGetAttachment(imageDataSampleBuffer, kCGImagePropertyExifDictionary, NULL);
-//            NSLog(@"影像屬性: %@", myAttachments);
-            
-            
-            
-//            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
-            
         }
     }];
     
+}
+
+- (void)didAnswerProblem {
+    NSDictionary* round = [[MoTaker sharedInstance]round];
+    if ([[round objectForKey:@"prob_cnt"]integerValue] > current_prob_cnt) {
+        current_prob_cnt = [[round objectForKey:@"prob_cnt"]integerValue];
+        [self lew_dismissPopupView];
+        [self switchMode:GuessMode];
+    }
 }
 
 - (void)get_problem {

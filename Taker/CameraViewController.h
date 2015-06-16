@@ -22,6 +22,7 @@
     IBOutlet UIView* guessModeView;
 
     NSTimer*            get_round_timer;
+    NSTimer*            answer_timer;
     
 }
 @property IBOutlet UIView *cameraView;

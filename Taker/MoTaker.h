@@ -9,13 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <MeetiFramework/AFNetworking.h>
 
-#define API_PREFIX          @"http://52.68.245.163/dev/"
-#define HEATBEAT_INTERVAL   3
-#define ONLINE_INTERVAL     5
-#define RESPOND_INTERVAL    0.5
-#define RESPOND_TIMEOUT     10
-#define INVITE_INTERVAL     0.5
-#define REINVITE_INTERVAL   0.5
+#define API_PREFIX              @"http://52.68.245.163/dev/"
+#define HEATBEAT_INTERVAL       3
+#define ONLINE_INTERVAL         5
+#define RESPOND_INTERVAL        0.5
+#define RESPOND_TIMEOUT         10
+#define INVITE_INTERVAL         0.5
+#define REINVITE_INTERVAL       0.5
+#define WAIT_ANSWER_INTERVAL    0.5
 
 
 @interface MoTaker : NSObject
