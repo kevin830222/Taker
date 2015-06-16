@@ -9,8 +9,22 @@
 #import <UIKit/UIKit.h>
 
 @interface CameraViewController : UIViewController
+{
+    int counter;
+    IBOutlet UIView* problemModeView;
+    IBOutletCollection(UIImageView)NSArray* imageViews;
+    IBOutlet UIView* hintView;
+    IBOutlet UILabel* hintLabel;
+    
 
+    IBOutletCollection(UIImageView)NSArray* guessImageViews;
+    IBOutletCollection(UIButton)NSArray* guessAnswerButton;
+    IBOutlet UIView* guessModeView;
+
+    NSTimer*            get_round_timer;
+    
+}
 @property IBOutlet UIView *cameraView;
-@property IBOutlet UIImageView *imageView;
+@property (nonatomic, readwrite, assign)BOOL guessMode;
 
 @end

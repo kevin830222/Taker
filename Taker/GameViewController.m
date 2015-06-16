@@ -72,7 +72,14 @@ NSInteger respondTimes;
             NSInteger code = [[json objectForKey:@"code"]integerValue];
             NSString* data = [json objectForKey:@"data"];
             if (code == 200) {
-                self.onlinePlayers = [[NSMutableArray alloc]initWithArray:(NSArray*)data];
+                self.onlinePlayers = [[NSMutableArray alloc]initWithArray:data];
+                
+                for (id s in self.onlinePlayers) {
+                    if ([s isEqualToString:[[MoTaker sharedInstance]account]]) {
+                        [self.onlinePlayers removeObject:s];
+                        break;
+                    }
+                }
                 [self.onlineTableView reloadData];
             }
             else {
@@ -106,16 +113,21 @@ NSInteger respondTimes;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
+  
     cell.textLabel.text = [self.onlinePlayers objectAtIndex:indexPath.row];
+    
     if ([[self.onlinePlayers objectAtIndex:indexPath.row] isEqualToString:[[MoTaker sharedInstance]account]]) {
         cell.backgroundColor = [UIColor colorWithRed:1.000 green:0.805 blue:0.644 alpha:1.000];
     }
+
     
     return cell;
 
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSString *player = self.onlinePlayers[indexPath.row];
     NSLog(@"players = %@ / %@", [[MoTaker sharedInstance]account], player);

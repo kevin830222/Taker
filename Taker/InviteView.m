@@ -10,6 +10,7 @@
 #import "MoTaker.h"
 #import "UIViewController+LewPopupViewController.h"
 #import "LewPopupViewAnimationFade.h"
+#import "CameraViewController.h"
 
 
 NSArray *invite;
@@ -75,6 +76,7 @@ NSTimer *timer;
               }];
     
     invite = [[[MoTaker sharedInstance]player]objectForKey:@"invite"];
+    
     if (invite.count == 0) {
         [self.parentVC lew_dismissPopupView];
     }
@@ -93,17 +95,55 @@ NSTimer *timer;
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    
-    cell.textLabel.text = [invite objectAtIndex:indexPath.row];
+    if (indexPath.row == invite.count) {
+        //last
+        cell.textLabel.text = @"Dismiss";
+    }else{
+        cell.textLabel.text = [invite objectAtIndex:indexPath.row];
+    }
     
     return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return invite.count;
+    return invite.count+1;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+   
+    if (indexPath.row == invite.count) {
+        //last
+
+        //  accept round
+        NSLog(@"r = %@",[[MoTaker sharedInstance]round_id]);
+        
+        for (NSString* invId in invite) {
+            [[[MoTaker sharedInstance]manager]POST:[API_PREFIX stringByAppendingString:@"quit_round.php"]
+                                        parameters:@{@"round_id":invId}
+                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                               NSError* error = nil;
+                                               NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
+                                               if (error) {
+                                                   [[MoTaker sharedInstance]alert:@"Server Error" message:[error description]];
+                                               }
+                                               else {
+                                                   NSInteger code = [[json objectForKey:@"code"]integerValue];
+                                                   NSString* data = [json objectForKey:@"data"];
+                                                   if (code == 200) {
+                                                       [[MoTaker sharedInstance]deny_invitation];
+                                                       [self.parentVC lew_dismissPopupView];
+                                                   }
+                                                   else {
+                                                       [[MoTaker sharedInstance]alert:@"Quit Round Failed" message:data];
+                                                   }
+                                               }
+                                               
+                                           } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                               [[MoTaker sharedInstance]alert:@"Internet Error" message:[error description]];
+                                           }];
+        }
+        return;
+    }
     
 
     [[MoTaker sharedInstance]deny_invitation];
@@ -127,8 +167,10 @@ NSTimer *timer;
                                           NSString* data = [json objectForKey:@"data"];
                                           if (code == 200) {
                                               [timer invalidate];
-                                              UIViewController *guessVC = [self.parentVC.storyboard instantiateViewControllerWithIdentifier:@"guessVC"];
-                                              [self.parentVC presentViewController:guessVC animated:YES completion:nil];
+                                              
+                                              CameraViewController *cameraVC = [self.parentVC.storyboard instantiateViewControllerWithIdentifier:@"cameraVC"];
+                                              cameraVC.guessMode = YES;
+                                              [self.parentVC presentViewController:cameraVC animated:YES completion:nil];
                                           }
                                           else {
                                               [[MoTaker sharedInstance]alert:@"Accept Round Failed" message:data];

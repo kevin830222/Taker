@@ -10,6 +10,8 @@
 #import "MoTaker.h"
 #import <AVFoundation/AVFoundation.h>
 #import <ImageIO/CGImageProperties.h>
+#import "PopupView.h"
+#import "LewPopupViewAnimationFade.h"
 
 AVCaptureSession *session;
 AVCaptureDevice *frontDevice = nil, *backDevice = nil;
@@ -17,18 +19,29 @@ AVCaptureDeviceInput *frontInput = nil, *backInput = nil, *currentInput = nil;
 NSMutableArray *pictures;
 AVCaptureStillImageOutput *imageOutput;
 
-@interface CameraViewController ()
+@interface CameraViewController () <UITabBarDelegate>
 
 @end
 
 @implementation CameraViewController
 
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        self.guessMode = NO;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
+
+    
     [super viewDidLoad];
     session = [[AVCaptureSession alloc]init];
     
-    if ([session canSetSessionPreset:AVCaptureSessionPresetPhoto]) {
-        [session setSessionPreset:AVCaptureSessionPresetPhoto];
+    if ([session canSetSessionPreset:AVCaptureSessionPresetLow]) {
+        [session setSessionPreset:AVCaptureSessionPresetLow];
     }
     else {
         [[MoTaker sharedInstance]alert:@"Preset Session Failed" message:@"Cannot preset photo"];
@@ -77,9 +90,10 @@ AVCaptureStillImageOutput *imageOutput;
     
     //建立 AVCaptureVideoPreviewLayer
     AVCaptureVideoPreviewLayer *previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:session];
-    [previewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
+    [previewLayer setVideoGravity:AVLayerVideoGravityResize];
     [previewLayer setFrame:self.cameraView.frame];
     [self.cameraView.layer addSublayer:previewLayer];
+    [[self.cameraView layer] setMasksToBounds:YES];
     
     //建立 AVCaptureStillImageOutput
     imageOutput = [[AVCaptureStillImageOutput alloc] init];
@@ -87,9 +101,73 @@ AVCaptureStillImageOutput *imageOutput;
     [imageOutput setOutputSettings:outputSettings];
     [session addOutput:imageOutput];
     
-    [session startRunning];
-
+    [hintView setBackgroundColor:[[hintView backgroundColor] colorWithAlphaComponent:0.5f]];
+    hintView.alpha = 0.0;
     
+    
+    [[[MoTaker sharedInstance] manager]
+     POST:[API_PREFIX stringByAppendingPathComponent:@"next_problem.php"]
+                                  parameters:@{@"round_id": [[MoTaker sharedInstance] round_id]}
+     success:^(AFHTTPRequestOperation *operation, id responseObject) {
+         NSLog(@"response = %@",operation.responseString);
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         
+     }];
+}
+
+
+
+-(IBAction)switch_view{
+    if ([session isRunning]) {
+        [session stopRunning];
+        [UIView animateWithDuration:0.3f animations:^{
+            hintView.alpha = 1.0;
+            self.cameraView.alpha = 0.0;
+        }];
+    }else{
+        [UIView animateWithDuration:0.3f animations:^{
+            hintView.alpha = 0.0;
+            self.cameraView.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            [session startRunning];
+        }];
+    }
+
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+    if (self.guessMode){
+        //guess mode
+        problemModeView.hidden = YES;
+        guessModeView.hidden = NO;
+        self.cameraView.hidden = YES;
+        PopupView *view = [PopupView defaultPopupView];
+        view.parentVC = self;
+        [self lew_presentPopupView:view animation:[LewPopupViewAnimationFade new] dismissed:^{
+        }];
+        
+        get_round_timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(get_round) userInfo:nil repeats:YES];
+        
+    }else{
+        //problem mode
+        problemModeView.hidden = NO;
+        guessModeView.hidden = YES;
+        
+        [UIView animateWithDuration:0.3f animations:^{
+            hintView.alpha = 1.0;
+            self.cameraView.alpha = 0.0;
+            [[hintView layer] setCornerRadius:10];
+        }];
+    }
+}
+-(void)get_round{
+    [[[MoTaker sharedInstance] manager] GET:[API_PREFIX stringByAppendingPathComponent:@"get_round.php"] parameters:@{@"round_id":[[MoTaker sharedInstance] round_id]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"response = %@",operation.responseString);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"failure response = %@",error);
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -113,6 +191,9 @@ AVCaptureStillImageOutput *imageOutput;
 
 - (IBAction)takePicture:(id)sender {
     
+    if (![session isRunning]) {
+        return;
+    }
     AVCaptureConnection *myVideoConnection = nil;
     
     //從 AVCaptureStillImageOutput 中取得正確類型的 AVCaptureConnection
@@ -132,16 +213,26 @@ AVCaptureStillImageOutput *imageOutput;
         if (imageDataSampleBuffer) {
             NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
             
-            //取得的靜態影像
-            UIImage *image = [[UIImage alloc] initWithData:imageData];
-            self.imageView.image = image;
             
-            [[[MoTaker sharedInstance] manager] POST:@"url" parameters:@"" constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-                [formData appendPartWithFileData:imageData name:@"image" fileName:@"image.jpg" mimeType:@"image/jpeg"];
+            NSString* filename = [NSString stringWithFormat:@"%@-%@-%d.jpg",[[MoTaker sharedInstance] round_id], @"",counter];
+        
+            [[[MoTaker sharedInstance] manager] POST:[API_PREFIX stringByAppendingString:@"send_picture.php"]
+                                          parameters:@"" constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+                [formData appendPartWithFileData:imageData name:@"file" fileName:filename mimeType:@"image/jpeg"];
             } success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 
+                //取得的靜態影像
+                UIImage *image = [[UIImage alloc] initWithData:imageData];
+                for (UIImageView* v in imageViews) {
+                    if (counter == v.tag) {
+                        [v setImage:image];
+                        break;
+                    }
+                }
+                counter++;
+                NSLog(@"success");
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                
+                NSLog(@"fail");
             }];
             
             
