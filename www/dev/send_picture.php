@@ -10,11 +10,11 @@
 	//echo $q . "<br>";
 	$result=mysqli_query($conn,$q);
 	if($row=mysqli_fetch_array($result)){
-		if (!file_exists()) {
-			# code...
+		$dir = "picture/" . $row['prob_id'] . "/";
+		if (!file_exists($dir)) {
+			mkdir($dir);	
 		}
-		mkdir
-		$target_file = "picture/" . $row['prob_id'] . "/" . $_FILES["file"]["name"];
+		$target_file = $dir . $_FILES["file"]["name"];
 		if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
 			//echo $target_file . " has been uploaded";
 			$j=array('code'=>200,'data'=>'ACCEPT');

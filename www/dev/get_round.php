@@ -40,6 +40,7 @@
 			'done'=>$row['done']);
 
 		$prob_id = $row['prob_id'];
+		$round_id = $_GET['round_id'];
 		$prob_cnt = $row['prob_cnt'];
 		$q="select * from problem where prob_id='".$prob_id."'";
 		$result=mysqli_query($conn, $q);
@@ -57,9 +58,12 @@
 				array_push($opts, $row['name']);
 			}
 			$list['options']=$opts;
-			
-			$pics = array($prob_id."/".$_GET['round_id']."-".$prob_cnt."-1.png", $prob_id."/".$_GET['round_id']."-".$prob_cnt."-2.png", $prob_id."/".$_GET['round_id']."-".$prob_cnt."-3.png");
-			$list['pictures']=$pics;
+
+
+            $files = scandir("picture/$prob_id");
+            $pattern = "/^$round_id-$prob_cnt/i";
+            $pictures = array_values(preg_grep($pattern, $files));
+			$list['pictures']=$pictures;
 		}
 		else {
 			// problem is not defined

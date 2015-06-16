@@ -36,19 +36,6 @@ typedef enum : NSUInteger {
     self = [super initWithCoder:coder];
     if (self) {
         self.guessMode = NO;
-        //  出題
-        [[[MoTaker sharedInstance] manager]
-         POST:[API_PREFIX stringByAppendingPathComponent:@"next_problem.php"]
-         parameters:@{@"round_id": [[MoTaker sharedInstance] round_id]}
-         success:^(AFHTTPRequestOperation *operation, id responseObject) {
-
-             [self get_round];
-             hintLabel.text = [[[MoTaker sharedInstance]round]objectForKey:@"problem"];
-
-         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-             NSLog(@"fail");
-         }];
-        
     }
     return self;
 }
@@ -159,6 +146,21 @@ typedef enum : NSUInteger {
 - (void)switchMode:(TakerMode)mode {
     switch (mode) {
         case ProblemMode: {
+
+            //  出題
+            [[[MoTaker sharedInstance] manager]
+             POST:[API_PREFIX stringByAppendingPathComponent:@"next_problem.php"]
+             parameters:@{@"round_id": [[MoTaker sharedInstance] round_id]}
+             success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                 [self get_round];
+                 hintLabel.text = [[[MoTaker sharedInstance]round]objectForKey:@"problem"];
+                 current_prob_cnt = [[[[MoTaker sharedInstance]round]objectForKey:@"prob_cnt"]integerValue];
+                 NSLog(@"%ld", (long)current_prob_cnt);
+             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                 NSLog(@"fail");
+             }];
+
+            
             self.guessMode = NO;
             problemModeView.hidden = NO;
             guessModeView.hidden = YES;
@@ -168,6 +170,8 @@ typedef enum : NSUInteger {
                 self.cameraView.alpha = 0.0;
                 [[hintView layer] setCornerRadius:10];
             }];
+            
+            
             break;
         }
         case GuessMode: {
@@ -177,8 +181,8 @@ typedef enum : NSUInteger {
             self.cameraView.hidden = YES;
             PopupView *view = [PopupView defaultPopupView];
             view.parentVC = self;
-            [self lew_presentPopupView:view animation:[LewPopupViewAnimationFade new] dismissed:^{
-            }];
+            [self lew_presentPopupView:view animation:[LewPopupViewAnimationFade new]];
+            
             break;
         }
         default:
@@ -203,6 +207,7 @@ typedef enum : NSUInteger {
                 if ([[round objectForKey:@"done"]integerValue] == 1) {
                     [self dismissViewControllerAnimated:YES completion:nil];
                 }
+                NSLog(@"round = %@", data);
             }
             else {
                 [[MoTaker sharedInstance]alert:@"Get Round Data Failed" message:data];
