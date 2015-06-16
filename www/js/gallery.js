@@ -34,15 +34,17 @@ $(function () {
             })
             .appendTo(galleryContainer);
             topicDiv.append('<p>' + name + '</p>')
-            pictures.forEach(function(picture, index){
-                var filename = dir + "dev/picture/" + topic["prob_id"] + "/" + picture;
-                $('<a/>')
-                    .append($('<img>').prop('src', filename).prop('width', '100'))
-                    .prop('href', filename)
-                    .prop('title', name + " - " + index)
-                    .attr('data-gallery', '')
-                    .appendTo(topicDiv);
-            });
+            if (pictures) {
+                pictures.forEach(function(picture, index){
+                    var filename = dir + "dev/picture/" + topic["prob_id"] + "/" + picture;
+                    $('<a/>')
+                        .append($('<img>').prop('src', filename).prop('width', '100'))
+                        .prop('href', filename)
+                        .prop('title', name + " - " + index)
+                        .attr('data-gallery', '')
+                        .appendTo(topicDiv);
+                });
+            };
 
         });
     });
