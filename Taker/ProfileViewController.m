@@ -7,6 +7,7 @@
 //
 
 #import "ProfileViewController.h"
+#import "MoTaker.h"
 
 @interface ProfileViewController ()
 
@@ -16,7 +17,31 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    //  get player data
+    [[[MoTaker sharedInstance]manager]GET:[API_PREFIX stringByAppendingString:@"get_player.php"]
+                               parameters:@{@"player_id": [[MoTaker sharedInstance]account]}
+                                  success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError* error = nil;
+        NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
+        if (error) {
+            [[MoTaker sharedInstance]alert:@"Server Error" message:[error description]];
+        }
+        else {
+            NSInteger code = [[json objectForKey:@"code"]integerValue];
+            NSString* data = [json objectForKey:@"data"];
+            if (code == 200) {
+                NSLog(@"Data = %@", data);
+            }
+            else {
+                [[MoTaker sharedInstance]alert:@"Get Player Data Failed" message:data];
+            }
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [[MoTaker sharedInstance]alert:@"Internet Error" message:[error description]];
+    }];
+
 }
 
 - (void)didReceiveMemoryWarning {

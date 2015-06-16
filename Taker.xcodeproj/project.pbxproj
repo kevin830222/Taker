@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A005F6D1B2D9EB300794058 /* MeetiFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A005F6C1B2D9EB300794058 /* MeetiFramework.framework */; };
+		0A005F6F1B2D9EBA00794058 /* MeetiFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0A005F6C1B2D9EB300794058 /* MeetiFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3F6227881B2DDB05000947CD /* InviteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F6227861B2DDB05000947CD /* InviteView.m */; };
+		3F6227891B2DDB05000947CD /* InviteView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F6227871B2DDB05000947CD /* InviteView.xib */; };
+		3F62278C1B2DEB7D000947CD /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F62278B1B2DEB7D000947CD /* CameraViewController.m */; };
+		3F6227981B2E0B17000947CD /* GuessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F6227971B2E0B17000947CD /* GuessViewController.m */; };
+		3F921CB21B2DA14000E1A2E6 /* MoTaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F921CB11B2DA14000E1A2E6 /* MoTaker.m */; };
+		3F921CB51B2DA51700E1A2E6 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F921CB41B2DA51700E1A2E6 /* LoginViewController.m */; };
 		3FC6A0B01B2D7E94002AC531 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FC6A0AF1B2D7E94002AC531 /* main.m */; };
 		3FC6A0B31B2D7E94002AC531 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FC6A0B21B2D7E94002AC531 /* AppDelegate.m */; };
 		3FC6A0B91B2D7E94002AC531 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FC6A0B71B2D7E94002AC531 /* Main.storyboard */; };
@@ -15,6 +23,13 @@
 		3FC6A0CA1B2D7E94002AC531 /* TakerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FC6A0C91B2D7E94002AC531 /* TakerTests.m */; };
 		3FC6A0DD1B2D987A002AC531 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FC6A0DC1B2D987A002AC531 /* GameViewController.m */; };
 		3FC6A0E01B2D988B002AC531 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FC6A0DF1B2D988B002AC531 /* ProfileViewController.m */; };
+		3FFE27121B2DC53B00D5203A /* SDRotationLoopProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FFE27111B2DC53B00D5203A /* SDRotationLoopProgressView.m */; };
+		3FFE27181B2DC76300D5203A /* PopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FFE27161B2DC76300D5203A /* PopupView.m */; };
+		3FFE27191B2DC76300D5203A /* PopupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3FFE27171B2DC76300D5203A /* PopupView.xib */; };
+		3FFE271C1B2DC82100D5203A /* SDBaseProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FFE271B1B2DC82100D5203A /* SDBaseProgressView.m */; };
+		3FFE27251B2DC9AD00D5203A /* LewPopupBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FFE27201B2DC9AD00D5203A /* LewPopupBackgroundView.m */; };
+		3FFE27261B2DC9AD00D5203A /* LewPopupViewAnimationFade.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FFE27221B2DC9AD00D5203A /* LewPopupViewAnimationFade.m */; };
+		3FFE27271B2DC9AD00D5203A /* UIViewController+LewPopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FFE27241B2DC9AD00D5203A /* UIViewController+LewPopupViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,7 +42,33 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		0A005F701B2D9EBA00794058 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0A005F6F1B2D9EBA00794058 /* MeetiFramework.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		0A005F6C1B2D9EB300794058 /* MeetiFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MeetiFramework.framework; sourceTree = "<group>"; };
+		3F6227851B2DDB05000947CD /* InviteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteView.h; sourceTree = "<group>"; };
+		3F6227861B2DDB05000947CD /* InviteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteView.m; sourceTree = "<group>"; };
+		3F6227871B2DDB05000947CD /* InviteView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InviteView.xib; sourceTree = "<group>"; };
+		3F62278A1B2DEB7D000947CD /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
+		3F62278B1B2DEB7D000947CD /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
+		3F6227961B2E0B17000947CD /* GuessViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuessViewController.h; sourceTree = "<group>"; };
+		3F6227971B2E0B17000947CD /* GuessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuessViewController.m; sourceTree = "<group>"; };
+		3F921CB01B2DA14000E1A2E6 /* MoTaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoTaker.h; sourceTree = "<group>"; };
+		3F921CB11B2DA14000E1A2E6 /* MoTaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoTaker.m; sourceTree = "<group>"; };
+		3F921CB31B2DA51700E1A2E6 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		3F921CB41B2DA51700E1A2E6 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		3FC6A0AA1B2D7E94002AC531 /* Taker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FC6A0AE1B2D7E94002AC531 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3FC6A0AF1B2D7E94002AC531 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -43,6 +84,19 @@
 		3FC6A0DC1B2D987A002AC531 /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
 		3FC6A0DE1B2D988B002AC531 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		3FC6A0DF1B2D988B002AC531 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		3FFE27101B2DC53B00D5203A /* SDRotationLoopProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDRotationLoopProgressView.h; sourceTree = "<group>"; };
+		3FFE27111B2DC53B00D5203A /* SDRotationLoopProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDRotationLoopProgressView.m; sourceTree = "<group>"; };
+		3FFE27151B2DC76300D5203A /* PopupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupView.h; sourceTree = "<group>"; };
+		3FFE27161B2DC76300D5203A /* PopupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupView.m; sourceTree = "<group>"; };
+		3FFE27171B2DC76300D5203A /* PopupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PopupView.xib; sourceTree = "<group>"; };
+		3FFE271A1B2DC82100D5203A /* SDBaseProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDBaseProgressView.h; sourceTree = "<group>"; };
+		3FFE271B1B2DC82100D5203A /* SDBaseProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDBaseProgressView.m; sourceTree = "<group>"; };
+		3FFE271F1B2DC9AD00D5203A /* LewPopupBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LewPopupBackgroundView.h; sourceTree = "<group>"; };
+		3FFE27201B2DC9AD00D5203A /* LewPopupBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LewPopupBackgroundView.m; sourceTree = "<group>"; };
+		3FFE27211B2DC9AD00D5203A /* LewPopupViewAnimationFade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LewPopupViewAnimationFade.h; sourceTree = "<group>"; };
+		3FFE27221B2DC9AD00D5203A /* LewPopupViewAnimationFade.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LewPopupViewAnimationFade.m; sourceTree = "<group>"; };
+		3FFE27231B2DC9AD00D5203A /* UIViewController+LewPopupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+LewPopupViewController.h"; sourceTree = "<group>"; };
+		3FFE27241B2DC9AD00D5203A /* UIViewController+LewPopupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+LewPopupViewController.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A005F6D1B2D9EB300794058 /* MeetiFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +118,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3F6227841B2DCC38000947CD /* SDProgressView */ = {
+			isa = PBXGroup;
+			children = (
+				3FFE271A1B2DC82100D5203A /* SDBaseProgressView.h */,
+				3FFE271B1B2DC82100D5203A /* SDBaseProgressView.m */,
+				3FFE27101B2DC53B00D5203A /* SDRotationLoopProgressView.h */,
+				3FFE27111B2DC53B00D5203A /* SDRotationLoopProgressView.m */,
+			);
+			name = SDProgressView;
+			sourceTree = "<group>";
+		};
 		3FC6A0A11B2D7E94002AC531 = {
 			isa = PBXGroup;
 			children = (
@@ -89,11 +155,28 @@
 				3FC6A0B71B2D7E94002AC531 /* Main.storyboard */,
 				3FC6A0BA1B2D7E94002AC531 /* Images.xcassets */,
 				3FC6A0BC1B2D7E94002AC531 /* LaunchScreen.xib */,
+				3F921CB01B2DA14000E1A2E6 /* MoTaker.h */,
+				3F921CB11B2DA14000E1A2E6 /* MoTaker.m */,
+				3F921CB31B2DA51700E1A2E6 /* LoginViewController.h */,
+				3F921CB41B2DA51700E1A2E6 /* LoginViewController.m */,
 				3FC6A0DB1B2D987A002AC531 /* GameViewController.h */,
 				3FC6A0DC1B2D987A002AC531 /* GameViewController.m */,
-				3FC6A0AD1B2D7E94002AC531 /* Supporting Files */,
+				3F6227851B2DDB05000947CD /* InviteView.h */,
+				3F6227861B2DDB05000947CD /* InviteView.m */,
+				3F6227871B2DDB05000947CD /* InviteView.xib */,
+				3F62278A1B2DEB7D000947CD /* CameraViewController.h */,
+				3F62278B1B2DEB7D000947CD /* CameraViewController.m */,
+				3F6227961B2E0B17000947CD /* GuessViewController.h */,
+				3F6227971B2E0B17000947CD /* GuessViewController.m */,
 				3FC6A0DE1B2D988B002AC531 /* ProfileViewController.h */,
 				3FC6A0DF1B2D988B002AC531 /* ProfileViewController.m */,
+				3F6227841B2DCC38000947CD /* SDProgressView */,
+				3FFE27151B2DC76300D5203A /* PopupView.h */,
+				3FFE27161B2DC76300D5203A /* PopupView.m */,
+				3FFE27171B2DC76300D5203A /* PopupView.xib */,
+				3FFE27281B2DCA0200D5203A /* LewPopup */,
+				0A005F6C1B2D9EB300794058 /* MeetiFramework.framework */,
+				3FC6A0AD1B2D7E94002AC531 /* Supporting Files */,
 			);
 			path = Taker;
 			sourceTree = "<group>";
@@ -124,6 +207,19 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		3FFE27281B2DCA0200D5203A /* LewPopup */ = {
+			isa = PBXGroup;
+			children = (
+				3FFE271F1B2DC9AD00D5203A /* LewPopupBackgroundView.h */,
+				3FFE27201B2DC9AD00D5203A /* LewPopupBackgroundView.m */,
+				3FFE27211B2DC9AD00D5203A /* LewPopupViewAnimationFade.h */,
+				3FFE27221B2DC9AD00D5203A /* LewPopupViewAnimationFade.m */,
+				3FFE27231B2DC9AD00D5203A /* UIViewController+LewPopupViewController.h */,
+				3FFE27241B2DC9AD00D5203A /* UIViewController+LewPopupViewController.m */,
+			);
+			name = LewPopup;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -134,6 +230,7 @@
 				3FC6A0A61B2D7E94002AC531 /* Sources */,
 				3FC6A0A71B2D7E94002AC531 /* Frameworks */,
 				3FC6A0A81B2D7E94002AC531 /* Resources */,
+				0A005F701B2D9EBA00794058 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -206,6 +303,8 @@
 			files = (
 				3FC6A0B91B2D7E94002AC531 /* Main.storyboard in Resources */,
 				3FC6A0BE1B2D7E94002AC531 /* LaunchScreen.xib in Resources */,
+				3FFE27191B2DC76300D5203A /* PopupView.xib in Resources */,
+				3F6227891B2DDB05000947CD /* InviteView.xib in Resources */,
 				3FC6A0BB1B2D7E94002AC531 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -224,10 +323,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FFE27121B2DC53B00D5203A /* SDRotationLoopProgressView.m in Sources */,
+				3FFE27261B2DC9AD00D5203A /* LewPopupViewAnimationFade.m in Sources */,
 				3FC6A0B31B2D7E94002AC531 /* AppDelegate.m in Sources */,
+				3F6227881B2DDB05000947CD /* InviteView.m in Sources */,
+				3FFE27271B2DC9AD00D5203A /* UIViewController+LewPopupViewController.m in Sources */,
+				3F62278C1B2DEB7D000947CD /* CameraViewController.m in Sources */,
 				3FC6A0DD1B2D987A002AC531 /* GameViewController.m in Sources */,
+				3F921CB51B2DA51700E1A2E6 /* LoginViewController.m in Sources */,
 				3FC6A0E01B2D988B002AC531 /* ProfileViewController.m in Sources */,
+				3FFE27181B2DC76300D5203A /* PopupView.m in Sources */,
+				3FFE27251B2DC9AD00D5203A /* LewPopupBackgroundView.m in Sources */,
+				3F6227981B2E0B17000947CD /* GuessViewController.m in Sources */,
 				3FC6A0B01B2D7E94002AC531 /* main.m in Sources */,
+				3F921CB21B2DA14000E1A2E6 /* MoTaker.m in Sources */,
+				3FFE271C1B2DC82100D5203A /* SDBaseProgressView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,9 +463,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Taker",
+				);
 				INFOPLIST_FILE = Taker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -363,9 +478,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Taker",
+				);
 				INFOPLIST_FILE = Taker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -422,6 +542,7 @@
 				3FC6A0CF1B2D7E94002AC531 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3FC6A0D01B2D7E94002AC531 /* Build configuration list for PBXNativeTarget "TakerTests" */ = {
 			isa = XCConfigurationList;
@@ -430,6 +551,7 @@
 				3FC6A0D21B2D7E94002AC531 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
