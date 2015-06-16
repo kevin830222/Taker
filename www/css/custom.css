@@ -1,14 +1,25 @@
-    /*
-    a.button{
-    height: 40px;
-    background-image:url("http://img.techxplore.com/newman/gfx/news/hires/2013/facebook_like_thumb.jpg");
-    text-indent: -9999px;
-    display:inline-block;}
-    
-    a#aaa{
-    width:40px;
-    background-position: 0px 0px;} */
-    ul.enlarge{
+/*
+a.button{
+height: 40px;
+background-image:url("http://img.techxplore.com/newman/gfx/news/hires/2013/facebook_like_thumb.jpg");
+text-indent: -9999px;
+display:inline-block;}
+
+a#aaa{
+width:40px;
+background-position: 0px 0px;} */
+
+img.rotateRight {
+    transform-origin: top left; /* IE 10+, Firefox, etc. */
+    -webkit-transform-origin: top left; /* Chrome */
+    -ms-transform-origin: top left; /* IE 9 */
+
+    transform: rotate(90deg) translateY(-100%);
+    -webkit-transform: rotate(90deg) translateY(-100%);
+    -ms-transform: rotate(90deg) translateY(-100%);
+}
+
+ul.enlarge{
 list-style-type:none; /*remove the bullet point*/
 }
 ul.enlarge li{
@@ -41,13 +52,13 @@ background-color:#eae9d4;
 padding: 10px;
 font-family: 'Droid Sans', sans-serif;
 font-size:.9em;
-text-align: center; 
-color: #495a62; 
+text-align: center;
+color: #495a62;
 -webkit-box-shadow: 0 0 20px rgba(0,0,0, .75));
 -moz-box-shadow: 0 0 20px rgba(0,0,0, .75);
 box-shadow: 0 0 20px rgba(0,0,0, .75);
--webkit-border-radius: 8px; 
--moz-border-radius: 8px; 
+-webkit-border-radius: 8px;
+-moz-border-radius: 8px;
 border-radius:8px;
 }
 ul.enlarge li:hover{
@@ -58,15 +69,15 @@ ul.enlarge span img{
 padding:2px;
 background:#ccc;
 }
-ul.enlarge li:hover span{ 
+ul.enlarge li:hover span{
 top: -300px; /*the distance from the bottom of the thumbnail to the top of the popup image*/
 left: -20px; /*distance from the left of the thumbnail to the left of the popup image*/
 }
 ul.enlarge li:hover:nth-child(2) span{
-left: -100px; 
+left: -100px;
 }
 ul.enlarge li:hover:nth-child(3) span{
-left: -200px; 
+left: -200px;
 }
 /***Override the styling of images set in step 3 to make the frame smaller and the background darker***/
 ul.enlarge span img{
@@ -74,21 +85,21 @@ padding: 2px; /*size of the frame*/
 background: #ccc; /*colour of the frame*/
 }
 /***Style the <span> containing the framed images and the caption***/
-ul.enlarge span{
-/**Style the frame**/
-padding: 10px; /*size of the frame*/
-background:#eae9d4; /*colour of the frame*/
-/*add a drop shadow to the frame*/
--webkit-box-shadow: 0 0 20px rgba(0,0,0, .75));
--moz-box-shadow: 0 0 20px rgba(0,0,0, .75);
-box-shadow: 0 0 20px rgba(0,0,0, .75);
-/*give the corners a curve*/
--webkit-border-radius: 8px;
--moz-border-radius: 8px;
-border-radius:8px;
-/**Style the caption**/
-font-family: 'Droid Sans', sans-serif; /*Droid Sans is available from Google fonts*/
-font-size:.9em;
-text-align: center;
-color: #495a62;
-}
+    ul.enlarge span{
+    /**Style the frame**/
+    padding: 10px; /*size of the frame*/
+    background:#eae9d4; /*colour of the frame*/
+    /*add a drop shadow to the frame*/
+    -webkit-box-shadow: 0 0 20px rgba(0,0,0, .75));
+    -moz-box-shadow: 0 0 20px rgba(0,0,0, .75);
+    box-shadow: 0 0 20px rgba(0,0,0, .75);
+    /*give the corners a curve*/
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius:8px;
+    /**Style the caption**/
+    font-family: 'Droid Sans', sans-serif; /*Droid Sans is available from Google fonts*/
+    font-size:.9em;
+    text-align: center;
+    color: #495a62;
+    }

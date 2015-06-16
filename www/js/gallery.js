@@ -38,7 +38,7 @@ $(function () {
                 pictures.forEach(function(picture, index){
                     var filename = dir + "dev/picture/" + topic["prob_id"] + "/" + picture;
                     $('<a/>')
-                        .append($('<img>').prop('src', filename).prop('width', '100'))
+                        .append($('<img>').prop('src', filename).prop('width', '100').addClass('rotateRight'))
                         .prop('href', filename)
                         .prop('title', name + " - " + index)
                         .attr('data-gallery', '')
