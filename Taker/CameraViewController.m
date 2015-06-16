@@ -223,29 +223,29 @@ typedef enum : NSUInteger {
 - (BOOL)displayImage {
     
     NSArray *pictures = [[[MoTaker sharedInstance]round]objectForKey:@"pictures"];
-    if (pictures) {
-        for (int i = 0; i < pictures.count; i ++) {
-            for (UIImageView* v in guessImageViews) {
-                if (i == v.tag) {
-                    
-                    NSString *prob_id = [[[MoTaker sharedInstance]round]objectForKey:@"prob_id"];
-                    
-                    //設定圖片的url位址
-                    NSURL *url = [NSURL URLWithString:[API_PREFIX stringByAppendingString:[NSString stringWithFormat:@"picture/%@/%@", prob_id, pictures[i]]]];
-                    
-                    NSLog(@"URL = %@", url);
-                    //使用NSData的方法將影像指定給UIImage
-                    UIImage *urlImage = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:url]];
-                    
-                    [v setImage:urlImage];
-                    
-                    break;
-                }
+    if ([pictures isEqual:[NSNull null]]) {
+        return NO;
+    }
+    for (int i = 0; i < pictures.count; i ++) {
+        for (UIImageView* v in guessImageViews) {
+            if (i == v.tag) {
+                
+                NSString *prob_id = [[[MoTaker sharedInstance]round]objectForKey:@"prob_id"];
+                
+                //設定圖片的url位址
+                NSURL *url = [NSURL URLWithString:[API_PREFIX stringByAppendingString:[NSString stringWithFormat:@"picture/%@/%@", prob_id, pictures[i]]]];
+                
+                NSLog(@"URL = %@", url);
+                //使用NSData的方法將影像指定給UIImage
+                UIImage *urlImage = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:url]];
+                
+                [v setImage:urlImage];
+                
+                break;
             }
         }
-        return pictures.count == 4;
     }
-    return NO;
+    return pictures.count == 4;
 }
 
 -(void)get_round{
@@ -272,8 +272,7 @@ typedef enum : NSUInteger {
                         for (int i=0; i<options.count; i++) {
                             for (UIButton* v in guessAnswerButton) {
                                 if (i == v.tag) {
-                                    v.titleLabel.text = [options objectAtIndex:i];
-                                    
+                                    [v setTitle:[options objectAtIndex:i] forState:UIControlStateNormal];
                                 }
                             }
                         }
