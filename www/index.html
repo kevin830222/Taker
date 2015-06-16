@@ -33,15 +33,10 @@
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
-                        <em class="fa fa-bars"></em>
+                        <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand page-scroll" href="#page-top">
-                        <i class="fa fa-home"></i>
-                        <!-- <span class="light">
-                            <img src="https://www.facebook.com/images/fb_icon_325x325.png" width= "40px" height="40px">
-                            </img> -->
-                    </span>
-                    </a>
+                    <a class="navbar-brand" href="index.html">Taker</a>
+                    <a class="navbar-brand page-scroll" href="gallery.html"><i class="fa fa-film"></i></a>
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
@@ -51,7 +46,10 @@
                             <a href="#page-top"></a>
                         </li>
                         <li>
-                            <a class="page-scroll" href="#about">About Taker</a>
+                            <a class="page-scroll" href="#about">About</a>
+                        </li>
+                        <li>
+                            <a class="page-scroll" href="#tech">Tech</a>
                         </li>
                         <li>
                             <a class="page-scroll" href="#gallery">Gallery</a>
@@ -73,144 +71,112 @@
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2">
                             <h1>Taker</h1>
-                            <!--<p class="intro-text">A free, responsive, one page Bootstrap theme.<br>Created by Start Bootstrap.<br>-->
+                            <p class="intro-text">Make Taking Pictures Is Not Only Takeing Pictures
+                                <br>Created by CNL Group2
+                            </p>
                             
-                            <ul class="enlarge">
-                                <li>
-                                    <span> <!--span contains the popup image-->
-                                    <!-- <img src="cars[0]"></img> <!--popup image--> -->
-                                    <!--caption appears under the popup image-->
-                                </span>
-                            </li>
-                            <li>
-                                <img src="https://www.facebook.com/images/fb_icon_325x325.png" width= "100px" height="100px"></img> <!--thumbnail image-->
-                                <span> <!--span contains the popup image-->
-                                <img src="https://www.facebook.com/images/fb_icon_325x325.png"></img> <!--popup image-->
-                                <!--caption appears under the popup image-->
-                            </span>
-                        </li>
-                        <li>
-                            <img src="https://www.facebook.com/images/fb_icon_325x325.png" width= "100px" height="100px"></img> <!--thumbnail image-->
-                            <span> <!--span contains the popup image-->
-                            <img src="https://www.facebook.com/images/fb_icon_325x325.png"></img> <!--popup image-->
-                            <!--caption appears under the popup image-->
-                        </span>
-                    </li>
-                </ul>
-                <a href="#about" class="btn btn-circle page-scroll">
-                    <i class="fa fa-angle-double-down animated"></i>
-                </a>
+                            <a href="#about" class="btn btn-circle page-scroll">
+                                <i class="fa fa-angle-double-down animated"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- About Section -->
+        <section id="about" class="container content-section text-center">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <h1>About</h1>
+                    <p>
+                        <div align = "center">
+                            <dl>
+                                <dt><font size="4">● Another Way For “Draw Something”</font>
+                                <dt><font size="4">● Combination With Social Network</font>
+                                <dt><font size="4">● More Interesting And Addicted</font>
+                            </dl>
+                        </div>
+                    </p>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Section -->
+        <section id="tech" class="container content-section text-center">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <h3>Tech Applied</h3>
+                    <p>
+                        <div align = "center">
+                            <dl>
+                                <dt><font size="4">● Social Networking: Facebook Based</font>
+                                <dt><font size="4">● Backend: Database / Notification</font>
+                                <dt><font size="4">● Frontend: Website / APP</font>
+                            </dl>
+                        </div>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="content-section text-center">
+            <div class="download-section">
+                <div class="container">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <h2>Gallery</h2>
+                        <p>You can explore all amazing pictures here!</p>
+                        
+                    <a href="gallery.html" class="btn btn-default btn-lg">Explore</a>    
+                    
+                </div>
             </div>
         </div>
-        </div>
-        </div>
-        </header>
-        <script>
-        var cars = ["https://www.facebook.com/images/fb_icon_325x325.png", "Volvo", "BMW"];
-        document.getElementById("demo").innerHTML = cars[0];
-        document.images[0].src=cars[0];
-        //<img src="cars[0]" width= "100px" height="100px"></img> <!--thumbnail image-->
-        </script>
+        </section>
 
+        <!-- Contact Section -->
+        <section id="contact" class="container content-section text-center">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <h2>Contact Taker</h2>
+                    <p>
+                        <div align="center">
+                            <font size="4">Feel free to email us to provide some feedback</font>
+                        </div>
+                    </p>
+                    <ul class="list-inline banner-social-buttons">
+                        <li>
+                            <a href="mailto:kk@mobagel.com" class="btn btn-default btn-lg">
+                                <i class="fa fa-envelope-o"></i>
+                                <span>Taker</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" class="btn btn-default btn-lg">
+                                <i class="fa fa-facebook fa-fw"></i> 
+                                <span>Club</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
+        <!-- Footer -->
+        <footer>
+            <div class="container text-center">
+                <p>Copyright &copy; Taker 2015</p>
+            </div>
+        </footer>
 
-<div id="myDiv"><h2>Let AJAX change this text</h2></div>
-<button type="button" onclick="loadXMLDoc()">Change Content</button>
-<!-- About Section -->
-<section id="about" class="container content-section text-center">
-<div class="row">
-    <div class="col-lg-8 col-lg-offset-2">
-        <h2>About Faceme</h2>
-        <p><div align = "center">
-            <dl>
-                <dt><font size="4">● Another Way For “Draw Something”</font>
-                <dt><font size="4">● Combination With Social Network</font>
-                <dt><font size="4">● More Interesting And Addicted</font>
-            </dl>
-        </div>
-    </p>
-    <h3>Tech applied</h3>
-    <p><div align = "center">
-        <dl>
-            <dt><font size="4">● Social Networking: Facebook Based</font>
-            <dt><font size="4">● Backend: Database / Notification</font>
-            <dt><font size="4">● Frontend: Website / APP</font>
-        </dl>
-    </div>
-</p>
-</div>
-</div>
-</section>
-<!-- Download Section
-<section id="download" class="content-section text-center">
-<div class="download-section">
-<div class="container">
-<div class="col-lg-8 col-lg-offset-2">
-    <h2>Download Grayscale</h2>
-    <p>You can download Grayscale for free on the preview page at Start Bootstrap.</p>
-    <a href="http://startbootstrap.com/template-overviews/grayscale/" class="btn btn-default btn-lg">Visit Download Page</a>
-</div>
-</div>
-</div>
-</section> -->
-<!-- Contact Section -->
-<section id="contact" class="container content-section text-center">
-<div class="row">
-<div class="col-lg-8 col-lg-offset-2">
-<h2>Contact Faceme</h2>
-<p><div align="center"><font size="4">Feel free to email us to provide some feedback on our <br>templates, give us suggestions or just say hello!</font></div></p>
-<p><a href="mailto:b01902087@ntu.edu.tw">b01902087@ntu.edu.tw</a>
-</p>
-<ul class="list-inline banner-social-buttons">
-<li>
-    <a href="https://www.facebook.com/kevin830222" class="btn btn-default btn-lg"><span class="network-name"><i class="fa fa-facebook fa-fw"></i> CEO -- 徐愷</span></a>
-</li>
-<li>
-    <a href="" class="btn btn-default btn-lg"><i class="fa fa-facebook fa-fw"></i> <span class="network-name">FaceMe -- club</span></a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<!-- Map Section
-<div id="map"></div>-->
-<!-- Footer -->
-<footer>
-<div class="container text-center">
-<p>Copyright &copy; FaceMe 2015</p>
-</div>
-</footer>
-<!-- jQuery -->
-<script src="js/jquery.js"></script>
-<!-- Bootstrap Core JavaScript -->
-<script src="js/bootstrap.min.js"></script>
-<!-- Plugin JavaScript -->
-<script src="js/jquery.easing.min.js"></script>
-<!-- Google Maps API Key - Use your own API key to enable the map feature. More information on the Google Maps API can be found at https://developers.google.com/maps/ -->
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRngKslUGJTlibkQ3FkfTxj3Xss1UlZDA&sensor=false"></script>
-<!-- Custom Theme JavaScript -->
-<script src="js/grayscale.js"></script>
-</body>
+        <!-- jQuery -->
+        <script src="js/jquery.js"></script>
+        <!-- Bootstrap Core JavaScript -->
+        <script src="js/bootstrap.min.js"></script>
+        <!-- Plugin JavaScript -->
+        <script src="js/jquery.easing.min.js"></script>
+        <!-- Custom Theme JavaScript -->
+        <script src="js/grayscale.js"></script>
+    </body>
 </html>
-
-<script>
-function loadXMLDoc() {
-    var xmlhttp;
-    if (window.XMLHttpRequest) {
-        // code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp=new XMLHttpRequest();
-    }
-    else {
-        // code for IE6, IE5
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-        document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
-        }
-    }
-    xmlhttp.open("GET","ajax_info.txt",true);
-    xmlhttp.send();
-}
-
-</script>
