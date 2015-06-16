@@ -17,6 +17,8 @@ img.rotateRight {
     transform: rotate(90deg) translateY(-100%);
     -webkit-transform: rotate(90deg) translateY(-100%);
     -ms-transform: rotate(90deg) translateY(-100%);
+
+    margin-bottom: 10px;
 }
 
 ul.enlarge{

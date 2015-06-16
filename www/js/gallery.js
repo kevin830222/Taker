@@ -30,7 +30,7 @@ $(function () {
             var pictures = topic["pictures"];
             var topicDiv = jQuery('<div/>', {
                 id: name + "Div",
-                style: "margin-top: 10px; background: ##9FC091",
+                style: "margin-top: 10px; margin-bottom: 10px; background: ##9FC091",
             })
             .appendTo(galleryContainer);
             topicDiv.append('<p>' + name + '</p>')
