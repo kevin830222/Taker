@@ -20,9 +20,11 @@
     IBOutletCollection(UIImageView)NSArray* guessImageViews;
     IBOutletCollection(UIButton)NSArray* guessAnswerButton;
     IBOutlet UIView* guessModeView;
+    IBOutlet UIImageView *answerImageView;
 
     NSTimer*            get_round_timer;
     NSTimer*            answer_timer;
+    IBOutlet UILabel* scoreLabel;
     
 }
 @property IBOutlet UIView *cameraView;

@@ -167,7 +167,7 @@ NSTimer *timer;
                                           NSString* data = [json objectForKey:@"data"];
                                           if (code == 200) {
                                               [timer invalidate];
-                                              
+                                              [self.parentVC lew_dismissPopupView];
                                               CameraViewController *cameraVC = [self.parentVC.storyboard instantiateViewControllerWithIdentifier:@"cameraVC"];
                                               cameraVC.guessMode = YES;
                                               [self.parentVC presentViewController:cameraVC animated:YES completion:nil];

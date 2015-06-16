@@ -20,6 +20,7 @@ AVCaptureDeviceInput *frontInput = nil, *backInput = nil, *currentInput = nil;
 NSMutableArray *pictures;
 AVCaptureStillImageOutput *imageOutput;
 NSInteger current_prob_cnt = 0;
+NSTimer *showTimer;
 
 typedef enum : NSUInteger {
     ProblemMode,
@@ -110,7 +111,7 @@ typedef enum : NSUInteger {
     
     [hintView setBackgroundColor:[[hintView backgroundColor] colorWithAlphaComponent:0.5f]];
     hintView.alpha = 0.0;
-
+    
 }
 
 
@@ -119,7 +120,7 @@ typedef enum : NSUInteger {
         [session stopRunning];
         [UIView animateWithDuration:0.3f animations:^{
             hintView.alpha = 1.0;
-            self.cameraView.alpha = 0.0;
+            self.cameraView.alpha = 1.0;
         }];
     }else{
         [UIView animateWithDuration:0.3f animations:^{
@@ -148,6 +149,7 @@ typedef enum : NSUInteger {
     switch (mode) {
         case ProblemMode: {
 
+            counter = 0;
             //  出題
             [[[MoTaker sharedInstance] manager]
              POST:[API_PREFIX stringByAppendingPathComponent:@"next_problem.php"]
@@ -168,7 +170,7 @@ typedef enum : NSUInteger {
                              [[MoTaker sharedInstance]setRound:round];
                              
                              hintLabel.text = [round objectForKey:@"problem"];
-//                             current_prob_cnt = [[round objectForKey:@"prob_cnt"]integerValue];
+                             current_prob_cnt = [[round objectForKey:@"prob_cnt"]integerValue];
 //                             NSLog(@"%ld", (long)current_prob_cnt);
                              
                              if ([[round objectForKey:@"done"]integerValue] == 1) {
@@ -191,10 +193,11 @@ typedef enum : NSUInteger {
             self.guessMode = NO;
             problemModeView.hidden = NO;
             guessModeView.hidden = YES;
+            self.cameraView.hidden = NO;
             
             [UIView animateWithDuration:0.3f animations:^{
                 hintView.alpha = 1.0;
-                self.cameraView.alpha = 0.0;
+                self.cameraView.alpha = 1.0;
                 [[hintView layer] setCornerRadius:10];
             }];
             
@@ -202,16 +205,46 @@ typedef enum : NSUInteger {
             break;
         }
         case GuessMode: {
-            updated = NO;
-            self.guessMode = YES;
-            problemModeView.hidden = YES;
-            guessModeView.hidden = NO;
-            self.cameraView.hidden = YES;
+            PopupView *view = [PopupView defaultPopupView];
+            view.parentVC = self;
+            [self lew_presentPopupView:view animation:[LewPopupViewAnimationFade new]];
+            [answer_timer invalidate];
+            [[[MoTaker sharedInstance] manager] GET:[API_PREFIX stringByAppendingPathComponent:@"get_round.php"] parameters:@{@"round_id":[[MoTaker sharedInstance] round_id]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                NSError* error = nil;
+                NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
+                if (error) {
+                    [[MoTaker sharedInstance]alert:@"Server Error" message:[error description]];
+                }
+                else {
+                    NSInteger code = [[json objectForKey:@"code"]integerValue];
+                    NSString* data = [json objectForKey:@"data"];
+                    if (code == 200) {
+                        NSDictionary *round = (NSDictionary*)data;
+                        [[MoTaker sharedInstance]setRound:round];
+                        
+                        if ([[round objectForKey:@"done"]integerValue] == 1) {
+                            [self dismissViewControllerAnimated:YES completion:nil];
+                        }
+                        
+                        [self lew_dismissPopupView];
+                        
+                        updated = NO;
+                        self.guessMode = YES;
+                        answerImageView.hidden = YES;
+                        problemModeView.hidden = YES;
+                        guessModeView.hidden = NO;
+                        self.cameraView.hidden = YES;
+
+                    }
+                    else {
+                        [[MoTaker sharedInstance]alert:@"Get Round Data Failed" message:data];
+                    }
+                }
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                [[MoTaker sharedInstance]alert:@"Internet Error" message:[error description]];
+            }];
+
             
-            
-//            PopupView *view = [PopupView defaultPopupView];
-//            view.parentVC = self;
-//            [self lew_presentPopupView:view animation:[LewPopupViewAnimationFade new]];
             
             break;
         }
@@ -226,6 +259,7 @@ typedef enum : NSUInteger {
     if ([pictures isEqual:[NSNull null]]) {
         return NO;
     }
+    
     for (int i = 0; i < pictures.count; i ++) {
         for (UIImageView* v in guessImageViews) {
             if (i == v.tag) {
@@ -265,10 +299,11 @@ typedef enum : NSUInteger {
                     [self dismissViewControllerAnimated:YES completion:nil];
                 }
                 NSLog(@"round = %@", data);
+                scoreLabel.text = [round objectForKey:@"score"];
                 if (self.guessMode) {
                     [self displayImage];
-                    NSArray *options = [round objectForKey:@"options"];
-                    if (options && !updated) {
+                    if ([round objectForKey:@"options"] && !updated) {
+                        NSArray *options = [round objectForKey:@"options"];
                         for (int i=0; i<options.count; i++) {
                             for (UIButton* v in guessAnswerButton) {
                                 if (i == v.tag) {
@@ -277,7 +312,16 @@ typedef enum : NSUInteger {
                             }
                         }
                         updated = YES;
+                        
                     }
+                }
+                else {
+                    answer_timer = [NSTimer scheduledTimerWithTimeInterval:WAIT_ANSWER_INTERVAL
+                                                                    target:self
+                                                                  selector:@selector(didAnswerProblem)
+                                                                  userInfo:nil
+                                                                   repeats:YES];
+
                 }
             }
             else {
@@ -368,11 +412,6 @@ typedef enum : NSUInteger {
                         if (counter == 4) {
                             PopupView *view = [PopupView defaultPopupView];
                             [self lew_presentPopupView:view animation:[LewPopupViewAnimationFade new]];
-                            answer_timer = [NSTimer scheduledTimerWithTimeInterval:WAIT_ANSWER_INTERVAL
-                                                                            target:self
-                                                                          selector:@selector(didAnswerProblem)
-                                                                          userInfo:nil
-                                                                           repeats:YES];
                         }
                     }
                     else {
@@ -390,11 +429,12 @@ typedef enum : NSUInteger {
 
 - (void)didAnswerProblem {
     NSDictionary* round = [[MoTaker sharedInstance]round];
-    NSLog(@"Prob Cnt. = %ld", (long)[[round objectForKey:@"prob_cnt"]integerValue]);
-    if ([[round objectForKey:@"prob_cnt"]integerValue] > current_prob_cnt) {
-        current_prob_cnt = [[round objectForKey:@"prob_cnt"]integerValue];
-        [self lew_dismissPopupView];
-        [self switchMode:GuessMode];
+    if ([round objectForKey:@"prob_cnt"]) {
+        if ([[round objectForKey:@"prob_cnt"]integerValue] > current_prob_cnt) {
+            current_prob_cnt = [[round objectForKey:@"prob_cnt"]integerValue];
+            [self lew_dismissPopupView];
+            [self switchMode:GuessMode];
+        }
     }
 }
 
@@ -439,7 +479,23 @@ typedef enum : NSUInteger {
                                            NSInteger code = [[json objectForKey:@"code"]integerValue];
                                            NSString* data = [json objectForKey:@"data"];
                                            if (code == 200) {
-                                               NSLog(@"ANS = %@", data);
+                                               if ([data isEqualToString:@"ACCEPT"]) {
+                                                   [answerImageView setImage:[UIImage imageNamed:@"correct"]];
+                                                   showTimer = [NSTimer scheduledTimerWithTimeInterval:2
+                                                                                                target:self
+                                                                                              selector:@selector(correctAnswer)
+                                                                                              userInfo:nil
+                                                                                               repeats:NO];
+                                               }
+                                               else {
+                                                   [answerImageView setImage:[UIImage imageNamed:@"wrong"]];
+                                                   showTimer = [NSTimer scheduledTimerWithTimeInterval:2
+                                                                                                target:self
+                                                                                              selector:@selector(exit:)
+                                                                                              userInfo:nil
+                                                                                               repeats:NO];
+                                               }
+                                               [answerImageView setHidden:NO];
                                            }
                                            else {
                                                [[MoTaker sharedInstance]alert:@"Answer Problem Failed" message:data];
@@ -451,7 +507,8 @@ typedef enum : NSUInteger {
                                    }];
 }
 
-- (void)get_problem {
+- (void)correctAnswer {
+    [self switchMode:ProblemMode];
 }
 
 @end
