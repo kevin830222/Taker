@@ -47,6 +47,7 @@
 
 		if($row=mysqli_fetch_array($result)) {
 			// problem is defined
+			$list['prob_id'] = $prob_id;
 			$list['prob_cnt'] = $prob_cnt;
 			$list['problem']=$row['name'];
 			$opts = array($row['name']);

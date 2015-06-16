@@ -13,6 +13,7 @@
 #import "PopupView.h"
 #import "LewPopupViewAnimationFade.h"
 
+BOOL updated;
 AVCaptureSession *session;
 AVCaptureDevice *frontDevice = nil, *backDevice = nil;
 AVCaptureDeviceInput *frontInput = nil, *backInput = nil, *currentInput = nil;
@@ -152,10 +153,36 @@ typedef enum : NSUInteger {
              POST:[API_PREFIX stringByAppendingPathComponent:@"next_problem.php"]
              parameters:@{@"round_id": [[MoTaker sharedInstance] round_id]}
              success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                 [self get_round];
-                 hintLabel.text = [[[MoTaker sharedInstance]round]objectForKey:@"problem"];
-                 current_prob_cnt = [[[[MoTaker sharedInstance]round]objectForKey:@"prob_cnt"]integerValue];
-                 NSLog(@"%ld", (long)current_prob_cnt);
+                 
+                 [[[MoTaker sharedInstance] manager] GET:[API_PREFIX stringByAppendingPathComponent:@"get_round.php"] parameters:@{@"round_id":[[MoTaker sharedInstance] round_id]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                     NSError* error = nil;
+                     NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
+                     if (error) {
+                         [[MoTaker sharedInstance]alert:@"Server Error" message:[error description]];
+                     }
+                     else {
+                         NSInteger code = [[json objectForKey:@"code"]integerValue];
+                         NSString* data = [json objectForKey:@"data"];
+                         if (code == 200) {
+                             NSDictionary *round = (NSDictionary*)data;
+                             [[MoTaker sharedInstance]setRound:round];
+                             
+                             hintLabel.text = [round objectForKey:@"problem"];
+//                             current_prob_cnt = [[round objectForKey:@"prob_cnt"]integerValue];
+//                             NSLog(@"%ld", (long)current_prob_cnt);
+                             
+                             if ([[round objectForKey:@"done"]integerValue] == 1) {
+                                 [self dismissViewControllerAnimated:YES completion:nil];
+                             }
+                         }
+                         else {
+                             [[MoTaker sharedInstance]alert:@"Get Round Data Failed" message:data];
+                         }
+                     }
+                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                     [[MoTaker sharedInstance]alert:@"Internet Error" message:[error description]];
+                 }];
+
              } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                  NSLog(@"fail");
              }];
@@ -175,13 +202,16 @@ typedef enum : NSUInteger {
             break;
         }
         case GuessMode: {
+            updated = NO;
             self.guessMode = YES;
             problemModeView.hidden = YES;
             guessModeView.hidden = NO;
             self.cameraView.hidden = YES;
-            PopupView *view = [PopupView defaultPopupView];
-            view.parentVC = self;
-            [self lew_presentPopupView:view animation:[LewPopupViewAnimationFade new]];
+            
+            
+//            PopupView *view = [PopupView defaultPopupView];
+//            view.parentVC = self;
+//            [self lew_presentPopupView:view animation:[LewPopupViewAnimationFade new]];
             
             break;
         }
@@ -190,6 +220,33 @@ typedef enum : NSUInteger {
     }
 }
 
+- (BOOL)displayImage {
+    
+    NSArray *pictures = [[[MoTaker sharedInstance]round]objectForKey:@"pictures"];
+    if (pictures) {
+        for (int i = 0; i < pictures.count; i ++) {
+            for (UIImageView* v in guessImageViews) {
+                if (i == v.tag) {
+                    
+                    NSString *prob_id = [[[MoTaker sharedInstance]round]objectForKey:@"prob_id"];
+                    
+                    //設定圖片的url位址
+                    NSURL *url = [NSURL URLWithString:[API_PREFIX stringByAppendingString:[NSString stringWithFormat:@"picture/%@/%@", prob_id, pictures[i]]]];
+                    
+                    NSLog(@"URL = %@", url);
+                    //使用NSData的方法將影像指定給UIImage
+                    UIImage *urlImage = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:url]];
+                    
+                    [v setImage:urlImage];
+                    
+                    break;
+                }
+            }
+        }
+        return pictures.count == 4;
+    }
+    return NO;
+}
 
 -(void)get_round{
     [[[MoTaker sharedInstance] manager] GET:[API_PREFIX stringByAppendingPathComponent:@"get_round.php"] parameters:@{@"round_id":[[MoTaker sharedInstance] round_id]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -208,6 +265,21 @@ typedef enum : NSUInteger {
                     [self dismissViewControllerAnimated:YES completion:nil];
                 }
                 NSLog(@"round = %@", data);
+                if (self.guessMode) {
+                    [self displayImage];
+                    NSArray *options = [round objectForKey:@"options"];
+                    if (options && !updated) {
+                        for (int i=0; i<options.count; i++) {
+                            for (UIButton* v in guessAnswerButton) {
+                                if (i == v.tag) {
+                                    v.titleLabel.text = [options objectAtIndex:i];
+                                    
+                                }
+                            }
+                        }
+                        updated = YES;
+                    }
+                }
             }
             else {
                 [[MoTaker sharedInstance]alert:@"Get Round Data Failed" message:data];
@@ -215,7 +287,8 @@ typedef enum : NSUInteger {
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [[MoTaker sharedInstance]alert:@"Internet Error" message:[error description]];
-    }];}
+    }];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -248,6 +321,7 @@ typedef enum : NSUInteger {
         for (AVCaptureInputPort *port in [connection inputPorts]) {
             if ([[port mediaType] isEqual:AVMediaTypeVideo]) {
                 myVideoConnection = connection;
+                [myVideoConnection setVideoOrientation:AVCaptureVideoOrientationPortrait];
                 break;
             }
         }
@@ -258,6 +332,7 @@ typedef enum : NSUInteger {
         
         //完成擷取時的處理常式(Block)
         if (imageDataSampleBuffer) {
+            
             NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
             
             NSDictionary *round = [[MoTaker sharedInstance]round];
@@ -341,6 +416,34 @@ typedef enum : NSUInteger {
                                            }
                                            else {
                                                [[MoTaker sharedInstance]alert:@"Quit Round Failed" message:data];
+                                           }
+                                       }
+                                       
+                                   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                       [[MoTaker sharedInstance]alert:@"Internet Error" message:[error description]];
+                                   }];
+}
+
+
+- (IBAction)answerProblem:(id)sender {
+    UIButton *button = (UIButton*)sender;
+    [[[MoTaker sharedInstance]manager]POST:[API_PREFIX stringByAppendingString:@"answer_problem.php"]
+                                parameters:@{@"round_id":[[MoTaker sharedInstance] round_id],
+                                             @"answer": button.titleLabel.text}
+                                   success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                       NSError* error = nil;
+                                       NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
+                                       if (error) {
+                                           [[MoTaker sharedInstance]alert:@"Server Error" message:[error description]];
+                                       }
+                                       else {
+                                           NSInteger code = [[json objectForKey:@"code"]integerValue];
+                                           NSString* data = [json objectForKey:@"data"];
+                                           if (code == 200) {
+                                               NSLog(@"ANS = %@", data);
+                                           }
+                                           else {
+                                               [[MoTaker sharedInstance]alert:@"Answer Problem Failed" message:data];
                                            }
                                        }
                                        
