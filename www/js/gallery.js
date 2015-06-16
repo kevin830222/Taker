@@ -28,13 +28,13 @@ $(function () {
         topics.forEach(function(topic, index){
             var name = topic["name"];
             var pictures = topic["pictures"];
-            var topicDiv = jQuery('<div/>', {
-                id: name + "Div",
-                style: "margin-top: 10px; margin-bottom: 10px; background: ##9FC091",
-            })
-            .appendTo(galleryContainer);
-            topicDiv.append('<p>' + name + '</p>')
             if (pictures) {
+                var topicDiv = jQuery('<div/>', {
+                    id: name + "Div",
+                    style: "margin-top: 10px; margin-bottom: 10px; background: ##9FC091",
+                })
+                .appendTo(galleryContainer);
+                topicDiv.append('<p>' + name + '</p>')
                 pictures.forEach(function(picture, index){
                     var filename = dir + "dev/picture/" + topic["prob_id"] + "/" + picture;
                     $('<a/>')
