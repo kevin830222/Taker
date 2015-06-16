@@ -59,6 +59,7 @@
                         type: event.type,
                         target: modal[0]
                     });
+                    modal.addClass('rotateRight');
                     modal.addClass('in');
                 }, factoryInterface);
             modal.find('.modal-title').text(element.title || String.fromCharCode(160));
