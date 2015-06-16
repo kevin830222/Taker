@@ -10,6 +10,12 @@
 
 @interface GameViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
+{
+    IBOutlet UITabBarItem *playBarButton, *personBarButton;
+}
+
+
+
 @property IBOutlet UITableView *onlineTableView;
 @property NSMutableArray *onlinePlayers;
 @property NSTimer *timer, *respondTimer;

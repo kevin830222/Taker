@@ -95,10 +95,14 @@ NSTimer *timer;
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
+    cell.textLabel.font = [UIFont fontWithName:@"Chalkboard SE" size:20];
+    cell.backgroundColor  = [UIColor colorWithRed:0.980 green:0.906 blue:0.809 alpha:1.000];
     if (indexPath.row == invite.count) {
         //last
-        cell.textLabel.text = @"Dismiss";
+        cell.textLabel.textColor = [UIColor colorWithRed:1.000 green:0.466 blue:0.639 alpha:1.000];
+        cell.textLabel.text = @"Cancel";
     }else{
+        cell.textLabel.textColor = [UIColor colorWithRed:1.000 green:0.372 blue:0.201 alpha:1.000];
         cell.textLabel.text = [invite objectAtIndex:indexPath.row];
     }
     

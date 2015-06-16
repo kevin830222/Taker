@@ -23,6 +23,10 @@ NSInteger respondTimes;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    
+    [playBarButton setImage:[UIImage imageNamed:@"logo"]];
+    [playBarButton setSelectedImage:[UIImage imageNamed:@"logo"]];
+    
     //  set delegate
     self.onlineTableView.delegate = self;
     self.onlineTableView.dataSource = self;

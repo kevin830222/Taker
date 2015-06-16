@@ -99,7 +99,7 @@ typedef enum : NSUInteger {
     //  建立 AVCaptureVideoPreviewLayer
     AVCaptureVideoPreviewLayer *previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:session];
     [previewLayer setVideoGravity:AVLayerVideoGravityResize];
-    [previewLayer setFrame:self.cameraView.frame];
+    [previewLayer setFrame:self.cameraView.bounds];
     [self.cameraView.layer addSublayer:previewLayer];
     [[self.cameraView layer] setMasksToBounds:YES];
     
@@ -148,7 +148,9 @@ typedef enum : NSUInteger {
 - (void)switchMode:(TakerMode)mode {
     switch (mode) {
         case ProblemMode: {
-
+            for (UIImageView* v in imageViews) {
+                [v setImage:NULL];
+            }
             counter = 0;
             //  出題
             [[[MoTaker sharedInstance] manager]
@@ -205,46 +207,23 @@ typedef enum : NSUInteger {
             break;
         }
         case GuessMode: {
+            for (UIImageView* v in guessImageViews) {
+                [v setImage:NULL];
+            }
+            
             PopupView *view = [PopupView defaultPopupView];
             view.parentVC = self;
             [self lew_presentPopupView:view animation:[LewPopupViewAnimationFade new]];
             [answer_timer invalidate];
-            [[[MoTaker sharedInstance] manager] GET:[API_PREFIX stringByAppendingPathComponent:@"get_round.php"] parameters:@{@"round_id":[[MoTaker sharedInstance] round_id]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                NSError* error = nil;
-                NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
-                if (error) {
-                    [[MoTaker sharedInstance]alert:@"Server Error" message:[error description]];
-                }
-                else {
-                    NSInteger code = [[json objectForKey:@"code"]integerValue];
-                    NSString* data = [json objectForKey:@"data"];
-                    if (code == 200) {
-                        NSDictionary *round = (NSDictionary*)data;
-                        [[MoTaker sharedInstance]setRound:round];
-                        
-                        if ([[round objectForKey:@"done"]integerValue] == 1) {
-                            [self dismissViewControllerAnimated:YES completion:nil];
-                        }
-                        
-                        [self lew_dismissPopupView];
-                        
-                        updated = NO;
-                        self.guessMode = YES;
-                        answerImageView.hidden = YES;
-                        problemModeView.hidden = YES;
-                        guessModeView.hidden = NO;
-                        self.cameraView.hidden = YES;
-
-                    }
-                    else {
-                        [[MoTaker sharedInstance]alert:@"Get Round Data Failed" message:data];
-                    }
-                }
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                [[MoTaker sharedInstance]alert:@"Internet Error" message:[error description]];
-            }];
-
             
+            updated = NO;
+            self.guessMode = YES;
+            answerImageView.hidden = YES;
+            problemModeView.hidden = YES;
+            guessModeView.hidden = NO;
+            self.cameraView.hidden = YES;
+
+            [self get_round];
             
             break;
         }
@@ -302,7 +281,8 @@ typedef enum : NSUInteger {
                 scoreLabel.text = [round objectForKey:@"score"];
                 if (self.guessMode) {
                     [self displayImage];
-                    if ([round objectForKey:@"options"] && !updated) {
+                    if (![[round objectForKey:@"options"]isEqual:[NSNull null]] && !updated) {
+                        [self lew_dismissPopupView];
                         NSArray *options = [round objectForKey:@"options"];
                         for (int i=0; i<options.count; i++) {
                             for (UIButton* v in guessAnswerButton) {
