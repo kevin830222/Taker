@@ -117,10 +117,9 @@ typedef enum : NSUInteger {
      success:^(AFHTTPRequestOperation *operation, id responseObject) {
          NSLog(@"response = %@",operation.responseString);
      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-         
+        NSLog(@"fail");
      }];
 }
-
 
 
 -(IBAction)switch_view{
