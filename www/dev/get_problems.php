@@ -1,5 +1,5 @@
 <?php
-    $conn=mysqli_connect("localhost","root","0222","cnldb");
+    $conn=mysqli_connect("localhost","root","cnlroot","cnldb");
     if(mysqli_connect_errno()){
         echo "Failed to connect to MySQL: ",mysqli_connect_error();
         exit(0);
