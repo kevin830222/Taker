@@ -103,7 +103,32 @@ NSTimer *timer;
         cell.textLabel.text = @"Cancel";
     }else{
         cell.textLabel.textColor = [UIColor colorWithRed:1.000 green:0.372 blue:0.201 alpha:1.000];
-        cell.textLabel.text = [invite objectAtIndex:indexPath.row];
+        
+//        cell.textLabel.text = [invite objectAtIndex:indexPath.row];
+        
+        
+        [[[MoTaker sharedInstance] manager] GET:[API_PREFIX stringByAppendingPathComponent:@"get_round.php"] parameters:@{@"round_id":[invite objectAtIndex:indexPath.row]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSError* error = nil;
+            NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
+            if (error) {
+                [[MoTaker sharedInstance]alert:@"Server Error" message:[error description]];
+            }
+            else {
+                NSInteger code = [[json objectForKey:@"code"]integerValue];
+                NSString* data = [json objectForKey:@"data"];
+                if (code == 200) {
+                    NSDictionary *round = (NSDictionary*)data;
+                    cell.textLabel.text = [round objectForKey:@"player1"];
+                }
+                else {
+                    [[MoTaker sharedInstance]alert:@"Get Round Data Failed" message:data];
+                }
+            }
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [[MoTaker sharedInstance]alert:@"Internet Error" message:[error description]];
+        }];
+        
+        
     }
     
     return cell;

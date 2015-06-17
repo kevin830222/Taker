@@ -46,6 +46,7 @@ typedef enum : NSUInteger {
 
     
     [super viewDidLoad];
+    updated = NO;
     session = [[AVCaptureSession alloc]init];
     
     if ([session canSetSessionPreset:AVCaptureSessionPresetLow]) {
@@ -281,7 +282,7 @@ typedef enum : NSUInteger {
                 scoreLabel.text = [round objectForKey:@"score"];
                 if (self.guessMode) {
                     [self displayImage];
-                    if (![[round objectForKey:@"options"]isEqual:[NSNull null]] && !updated) {
+                    if (![[round objectForKey:@"options"]isEqual:[NSNull null]] ) {
                         [self lew_dismissPopupView];
                         NSArray *options = [round objectForKey:@"options"];
                         for (int i=0; i<options.count; i++) {
